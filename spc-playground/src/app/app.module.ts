@@ -10,12 +10,14 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { FeaturesModule } from './features/features.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -25,6 +27,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
     CoreModule,
     SharedModule,
     FeaturesModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

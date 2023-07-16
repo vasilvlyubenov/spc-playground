@@ -1,0 +1,21 @@
+footer {
+    background: darkslategray;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    min-height: 30px;
+}
+
+footer p {
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+    text-align: center;
+    color: whitesmoke;
+}
+
+img {
+    width: 16px;
+    height: 16px;
+    margin: 0 auto;
+}

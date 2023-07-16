@@ -1,0 +1,30 @@
+header {
+    background-color: darkslategray;
+    display: flex;
+    justify-content: space-between;
+}
+
+a {
+    color: black;
+    color: whitesmoke;
+    min-height: 60px;
+}
+
+a:hover {
+    color: whitesmoke;
+}
+
+.header-container{
+    margin-left: 5rem;
+}
+
+.partsLinks {
+    display: flex;
+    flex-direction: row;
+}
+
+.userLinks {
+    display: flex;
+    flex-direction: row;
+}
+
