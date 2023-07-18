@@ -2,6 +2,7 @@ header {
     background-color: darkslategray;
     display: flex;
     justify-content: space-between;
+    height: 60px;
 }
 
 a {
@@ -13,18 +14,6 @@ a {
 a:hover {
     color: whitesmoke;
 }
-
-.header-container{
-    margin-left: 5rem;
+.nav-tabs {
+    border-color: darkslategray;
 }
-
-.partsLinks {
-    display: flex;
-    flex-direction: row;
-}
-
-.userLinks {
-    display: flex;
-    flex-direction: row;
-}
-
