@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
-import { NgbNavModule, NgbNav, NgbNavItem, NgbNavLink, NgbNavContent, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
-import { RouterModule } from '@angular/router';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './footer/footer.component';
+import { RouterLink } from '@angular/router';
 
 
 
@@ -14,7 +14,8 @@ import { FooterComponent } from './footer/footer.component';
   ],
   imports: [
     CommonModule,
-    NgbNav, NgbNavItem, NgbNavLink, NgbNavContent, NgbNavOutlet, NgbNavModule,RouterModule
+    NgbCollapseModule,
+    RouterLink
   ],
   exports: [
     HeaderComponent,

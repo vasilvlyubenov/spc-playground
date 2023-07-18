@@ -33,3 +33,14 @@ $spc-playground-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($spc-playground-theme);
 
+//add custom color to bootstrap
+$theme-colors: (
+  'darkslategray': #2f4f4f
+);
+
+@function theme-color($key: "darkslategray") {
+  @return map-get($theme-colors, $key);
+}
+
+@import "node_modules/bootstrap/scss/bootstrap";
+

@@ -12,7 +12,8 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { UserRoutingModule} from './features/user/user-routing.module';
+import { UserModule } from './features/user/user.module';
+import { PageNotFoundModule } from './page404/page-not-found.module';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -29,7 +30,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     CoreModule,
     SharedModule,
     NgbModule,
-    UserRoutingModule,
+    UserModule,
+    PageNotFoundModule
   ],
   providers: [],
   bootstrap: [AppComponent],
