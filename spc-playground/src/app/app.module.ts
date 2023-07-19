@@ -15,6 +15,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserModule } from './features/user/user.module';
 import { PageNotFoundModule } from './page404/page-not-found.module';
 
+
 PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
@@ -31,7 +32,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
     SharedModule,
     NgbModule,
     UserModule,
-    PageNotFoundModule
+    PageNotFoundModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
