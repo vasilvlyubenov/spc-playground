@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon'
 import { UserRoutingModule } from './user-routing.module';
+import { FormsModule } from '@angular/forms';
+
 
 
 
@@ -23,7 +25,8 @@ import { UserRoutingModule } from './user-routing.module';
     MatFormFieldModule,
     MatInputModule,
     UserRoutingModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule
   ],
 })
 export class UserModule { }

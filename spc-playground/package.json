@@ -22,6 +22,7 @@
     "@angular/router": "^16.1.0",
     "@ng-bootstrap/ng-bootstrap": "^15.1.0",
     "@popperjs/core": "^2.11.6",
+    "@supabase/supabase-js": "^2.26.0",
     "angular-plotly.js": "^5.2.1",
     "bootstrap": "^5.2.3",
     "plotly.js-dist-min": "^2.24.3",

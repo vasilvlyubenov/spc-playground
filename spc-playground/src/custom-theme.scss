@@ -33,10 +33,10 @@ $spc-playground-theme: mat.define-light-theme((color: (primary: $spc-playground-
 
 //add custom color to bootstrap
 $theme-colors: (
-  'darkslategray': #2f4f4f
+  'indigo': #1a237e
 );
 
-@function theme-color($key: "darkslategray") {
+@function theme-color($key: "indigo") {
   @return map-get($theme-colors, $key);
 }
 
