@@ -31,15 +31,17 @@ export class RegisterComponent {
           this.errorMessage = error.message;
           throw error;
         }
+        
+        form.reset();
+        this.userService.session;
         this.errorMessage = '';
+        this.router.navigate(['/']);
       },
       error: (err) => {
         console.error(err);
       }
     })
 
-    this.router.navigate(['/']);
-    form.reset();
   }
 
   onFileSelected(event: any) {

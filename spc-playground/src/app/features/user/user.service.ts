@@ -18,9 +18,6 @@ export class UserService {
     this.supabase.auth.getSession().then(({ data }) => {
       this._session = data.session;
     });
-    debugger
-    console.log(this._session);
-    
     return this._session;
   }
 
