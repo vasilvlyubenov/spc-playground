@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { UserService } from '../user.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy{
   selectedFileName: string = '';
   errorMessage: string = '';
+  regSubscription!: Subscription;
+  sessionSub!: Subscription;
 
   constructor(private userService: UserService, private router: Router) { }
 
@@ -25,7 +28,7 @@ export class RegisterComponent {
       return this.errorMessage = 'Password doesn\'t match!'
     }
 
-    this.userService.signUp(email, password).subscribe({
+    this.regSubscription = this.userService.signUp(email, password).subscribe({
       next: ({ data, error }) => {
         if (error) {
           this.errorMessage = error.message;
@@ -33,7 +36,8 @@ export class RegisterComponent {
         }
         
         form.reset();
-        this.userService.session;
+        this.userService.setToken(data.session.refresh_token)
+
         this.errorMessage = '';
         this.router.navigate(['/']);
       },
@@ -51,5 +55,12 @@ export class RegisterComponent {
 
   clearFileSelection() {
     this.selectedFileName = '';
+  }
+
+  ngOnDestroy(): void {
+
+    if (this.regSubscription) {
+      this.regSubscription.unsubscribe()
+    }
   }
 }
