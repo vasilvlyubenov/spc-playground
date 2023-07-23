@@ -3,7 +3,11 @@
     <mat-card-title>Register</mat-card-title>
     <mat-card-content>
       <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
-      <form #form="ngForm" (ngSubmit)="createRegisterHandler(form)">
+      <form #form="ngForm" (ngSubmit)="createRegisterHandler( form)">
+      <mat-form-field class="imageField">
+        <ngx-mat-file-input accept=".png, .jpg, .jpeg" type="file" placeholder="Upload avatar..." name="avatar" color="primary" ngModel>
+        </ngx-mat-file-input>
+      </mat-form-field>
         <mat-form-field>
           <input matInput type="email" placeholder="Email" name="email" ngModel required>
         </mat-form-field>
@@ -13,10 +17,7 @@
         <mat-form-field>
           <input matInput type="password" placeholder="Confirm Password" name="rePassword" ngModel required>
         </mat-form-field>
-        <!-- <mat-form-field>
-            <mat-label>Profile Image</mat-label>
-            <input type="file" accept="image/*" class="file-input" (change)="onFileSelected($event)">
-          </mat-form-field> -->
+
         <button mat-raised-button color="primary">Register</button>
       </form>
     </mat-card-content>

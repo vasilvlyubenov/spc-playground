@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon'
 import { UserRoutingModule } from './user-routing.module';
 import { FormsModule } from '@angular/forms';
+import { NgxMatFileInputModule  } from '@angular-material-components/file-input';
 
 
 
@@ -26,7 +27,8 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     UserRoutingModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
+    NgxMatFileInputModule
   ],
 })
 export class UserModule { }

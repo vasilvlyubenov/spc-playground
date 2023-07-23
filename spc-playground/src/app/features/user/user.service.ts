@@ -12,17 +12,16 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService implements OnDestroy{
+export class UserService implements OnDestroy {
   private user$$ = new BehaviorSubject<any>(undefined);
   public user$ = this.user$$.asObservable();
 
-  subscription!: Subscription
+  subscription!: Subscription;
   sessionSubscription: Subscription | undefined;
   private supabase: SupabaseClient;
   _session: AuthSession | null = null;
   user!: Object | undefined;
 
-  
   get session(): Session | null {
     this.supabase.auth.getSession().then(({ data }) => {
       this._session = data.session;
@@ -35,38 +34,23 @@ export class UserService implements OnDestroy{
     return !!this.user;
   }
 
-
   constructor() {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey
     );
 
-    // this.sessionSubscription = defer(() =>this.supabase.auth.getSession()).subscribe({
-    //   next: ({ data, error }) => {
-    //     if (error) {
-    //       throw error;
-    //     }
-
-    //     this.user = data.session;
-    //   },
-    //   error: (err) => {
-    //     console.error(err);
-    //   }
-    // });
-
     this.subscription = this.user$.subscribe((user) => {
       if (!user) {
-        return
-      } 
-      
+        return;
+      }
+
       if (user.data) {
         this.user = user;
       } else {
         this.user = undefined;
       }
     });
-
   }
 
   authChanges(
@@ -76,7 +60,9 @@ export class UserService implements OnDestroy{
   }
 
   signUp(email: string, password: string): Observable<any> {
-    const register$ = defer(() => this.supabase.auth.signUp({ email, password })).pipe(tap((data) => this.user$$.next(data)));
+    const register$ = defer(() =>
+      this.supabase.auth.signUp({ email, password })
+    ).pipe(tap((data) => this.user$$.next(data)));
     return register$;
   }
 
@@ -85,22 +71,42 @@ export class UserService implements OnDestroy{
       this.supabase.auth.signInWithPassword({ email, password })
     ).pipe(tap((data) => this.user$$.next(data)));
 
-    return login$
+    return login$;
   }
 
   signOut(): Observable<any> {
     this.removeToken();
-    return defer(() => this.supabase.auth.signOut()).pipe(tap((data) => this.user$$.next(data)));
+    return defer(() => this.supabase.auth.signOut()).pipe(
+      tap((data) => this.user$$.next(data))
+    );
   }
 
-  refreshSession(data: any) : Observable<any> {
-    return defer(() => this.supabase.auth.refreshSession(data)).pipe(tap((data) => this.user$$.next(data)));
+  refreshSession(data: any): Observable<any> {
+    return defer(() => this.supabase.auth.refreshSession(data)).pipe(
+      tap((data) => this.user$$.next(data))
+    );
   }
 
   ngOnDestroy(): void {
-      this.subscription.unsubscribe();
-      this.sessionSubscription?.unsubscribe();
-  } 
+    this.subscription.unsubscribe();
+    this.sessionSubscription?.unsubscribe();
+  }
+
+  async uploadAvatar(fileName: string, avatarFile: File): Promise<any> {
+    const generatedName = Date.now().toString();
+    const nameToArray = fileName.split('.');
+    const newFileName = `${generatedName}.${nameToArray[nameToArray.length - 1]}`;
+    const { data, error } = await this.supabase.storage
+      .from('avatars')
+      .upload(`avatars/${newFileName}`, avatarFile);
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+
+    return data;
+  }
 
   setToken(token: string): void {
     localStorage.setItem('refresh_token', token);

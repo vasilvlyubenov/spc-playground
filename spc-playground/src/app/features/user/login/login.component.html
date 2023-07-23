@@ -5,7 +5,7 @@
       <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
         <form #form="ngForm" (ngSubmit)="submitLoginHandler(form)">
           <mat-form-field>
-            <input matInput placeholder="Email" name="email"  ngModel required>
+            <input matInput type="email" placeholder="Email" name="email"  ngModel required>
           </mat-form-field>
           <mat-form-field>
             <input matInput type="password" placeholder="Password" name="password" ngModel required>

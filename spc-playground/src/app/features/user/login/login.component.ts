@@ -2,8 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { UserService } from '../user.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -15,11 +14,11 @@ export class LoginComponent implements OnDestroy {
   logSubscription!: Subscription;
   sessionSub!: Subscription;
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) {}
 
   submitLoginHandler(form: NgForm): string | void {
     if (form.invalid) {
-      return this.errorMessage = 'Please try again!'
+      return (this.errorMessage = 'Please try again!');
     }
 
     const { email, password } = form.form.value;
@@ -31,14 +30,14 @@ export class LoginComponent implements OnDestroy {
           throw error;
         }
         form.reset();
-        this.userService.setToken(data.session.refresh_token)
-        
+        this.userService.setToken(data.session.refresh_token);
+
         this.errorMessage = '';
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
       },
       error: (err) => {
         console.error(err);
-      }
+      },
     });
   }
 
