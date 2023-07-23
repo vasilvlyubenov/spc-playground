@@ -19,9 +19,9 @@ export class RegisterComponent implements OnDestroy {
   constructor(private userService: UserService, private router: Router) {}
 
   createRegisterHandler(form: NgForm): string | void {
-    // if (form?.invalid) {
-    //   return (this.errorMessage = 'Please try again!');
-    // }
+    if (form?.invalid) {
+      return (this.errorMessage = 'Please try again!');
+    }
 
     const { avatar, email, password, rePassword } = form?.form.value;
 
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnDestroy {
             throw this.errorMessage = 'File size greater than 5 MB!'
           }
           
-          const promiseResult = this.userService.uploadAvatar(avatar.name, avatar);
+          this.userService.uploadAvatar(avatar.name, avatar);
         }
 
         form.reset();

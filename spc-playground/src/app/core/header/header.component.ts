@@ -14,19 +14,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   session!: Object | null;
   refSubscription: Subscription | undefined;
 
-  constructor(private userService: UserService) {
-    // this.sessionSubscription = this.userService.session?.subscribe({
-    //   next: ({ data, error }) => {
-    //     if (error) {
-    //       throw error;
-    //     }
-    //     this.session = data.session;
-    //   },
-    //   error: (err) => {
-    //     console.error(err);
-    //   }
-    // });
-  }
+  constructor(private userService: UserService) { }
 
   get isLogged(): boolean {
     return !!this.userService.isLogged;
@@ -51,7 +39,18 @@ export class HeaderComponent implements OnDestroy, OnInit {
     const refreshToken = localStorage.getItem('refresh_token');
 
     if (refreshToken) {
-      this.refSubscription = this.userService.refreshSession({ refresh_token: refreshToken }).subscribe();
+      this.refSubscription = this.userService.refreshSession({ refresh_token: refreshToken }).subscribe({
+        next({data, error}) {
+            if (error) {
+              debugger
+              
+              if (error.name === 'AuthApiError') {
+                localStorage.removeItem('refresh_token');
+              }
+            }
+            
+        },
+      });
     }
   }
 
