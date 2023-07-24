@@ -27,6 +27,7 @@
     "angular-plotly.js": "^5.2.1",
     "bootstrap": "^5.2.3",
     "plotly.js-dist-min": "^2.24.3",
+    "popper.js": "^1.16.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

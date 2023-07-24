@@ -42,8 +42,6 @@ export class HeaderComponent implements OnDestroy, OnInit {
       this.refSubscription = this.userService.refreshSession({ refresh_token: refreshToken }).subscribe({
         next({data, error}) {
             if (error) {
-              debugger
-              
               if (error.name === 'AuthApiError') {
                 localStorage.removeItem('refresh_token');
               }

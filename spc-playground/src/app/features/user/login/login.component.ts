@@ -13,6 +13,7 @@ export class LoginComponent implements OnDestroy {
   errorMessage: string = '';
   logSubscription!: Subscription;
   sessionSub!: Subscription;
+  isLoading: boolean = false;
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -20,15 +21,18 @@ export class LoginComponent implements OnDestroy {
     if (form.invalid) {
       return (this.errorMessage = 'Please try again!');
     }
-
+    this.isLoading = true;
+    
     const { email, password } = form.form.value;
 
     this.logSubscription = this.userService.signIn(email, password).subscribe({
       next: ({ data, error }) => {
         if (error) {
+          this.router.navigate(['/login']);
           this.errorMessage = error.message;
           throw error;
         }
+        
         form.reset();
         this.userService.setToken(data.session.refresh_token);
 
@@ -45,5 +49,7 @@ export class LoginComponent implements OnDestroy {
     if (this.logSubscription) {
       this.logSubscription.unsubscribe();
     }
+
+    this.isLoading = false;
   }
 }

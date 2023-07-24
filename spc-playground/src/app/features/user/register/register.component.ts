@@ -15,6 +15,7 @@ export class RegisterComponent implements OnDestroy {
   regSubscription!: Subscription;
   sessionSub!: Subscription;
   avatarSubscription!: Subscription;
+  isLoading: boolean = false;
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -28,19 +29,21 @@ export class RegisterComponent implements OnDestroy {
     if (password !== rePassword) {
       return (this.errorMessage = "Password doesn't match!");
     }
+    this.isLoading = true;
 
     this.regSubscription = this.userService.signUp(email, password).subscribe({
       next: ({ data, error }) => {
         if (error) {
+          this.router.navigate(['/register']);
           this.errorMessage = error.message;
           throw error;
         }
-
         if (avatar) {
-          if ((avatar.size) > 5000000) {
-            throw this.errorMessage = 'File size greater than 5 MB!'
+          if (avatar.size > 5000000) {
+            this.router.navigate(['/register']);
+            throw (this.errorMessage = 'File size greater than 5 MB!');
           }
-          
+
           this.userService.uploadAvatar(avatar.name, avatar);
         }
 
@@ -64,5 +67,6 @@ export class RegisterComponent implements OnDestroy {
     if (this.avatarSubscription) {
       this.avatarSubscription.unsubscribe();
     }
+    this.isLoading = false;
   }
 }

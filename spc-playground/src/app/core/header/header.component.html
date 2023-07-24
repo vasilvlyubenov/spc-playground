@@ -4,29 +4,35 @@
     <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
 
     <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item active">
           <a class="nav-link" routerLink="/parts" (click)="isMenuCollapsed = true">Parts</a>
         </li>
         <ng-container *ngIf="isLogged">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/create-part" (click)="isMenuCollapsed = true">Create Part</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/profile" (click)="isMenuCollapsed = true">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="" (click)="logout()">Logout</a>
-        </li>
-      </ng-container>
-      <ng-container *ngIf="!isLogged">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/login" (click)="isMenuCollapsed = true">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/register" (click)="isMenuCollapsed = true">Register</a>
-        </li>
-      </ng-container>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/create-part" (click)="isMenuCollapsed = true">Create Part</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              <img class="user-img" src="../../../assets/user.png" />
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" routerLink="/profile" (click)="isMenuCollapsed = true">Profile</a>
+              <a class="dropdown-item" routerLink="" (click)="logout()">Logout</a>
+            </div>
+          </li>
+        </ng-container>
+        <ng-container class="margin" *ngIf="!isLogged">
+          <ul class="navbar-nav margin">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/login" (click)="isMenuCollapsed = true">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/register" (click)="isMenuCollapsed = true">Register</a>
+            </li>
+            </ul>
+        </ng-container>
       </ul>
     </div>
   </div>
