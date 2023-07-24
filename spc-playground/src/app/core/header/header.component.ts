@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/features/user/user.service';
 
@@ -7,12 +7,11 @@ import { UserService } from 'src/app/features/user/user.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
-export class HeaderComponent implements OnDestroy, OnInit {
+export class HeaderComponent implements OnDestroy {
   isMenuCollapsed: boolean = true;
   logoutSubscription: Subscription | undefined;
   sessionSubscription: Subscription | undefined;
   session!: Object | null;
-  refSubscription: Subscription | undefined;
 
   constructor(private userService: UserService) { }
 
@@ -35,30 +34,10 @@ export class HeaderComponent implements OnDestroy, OnInit {
     this.isMenuCollapsed = true;
   }
 
-  ngOnInit(): void {
-    const refreshToken = localStorage.getItem('refresh_token');
-
-    if (refreshToken) {
-      this.refSubscription = this.userService.refreshSession({ refresh_token: refreshToken }).subscribe({
-        next({data, error}) {
-            if (error) {
-              if (error.name === 'AuthApiError') {
-                localStorage.removeItem('refresh_token');
-              }
-            }
-            
-        },
-      });
-    }
-  }
 
   ngOnDestroy(): void {
     if (this.logoutSubscription) {
       this.logoutSubscription.unsubscribe();
-    }
-
-    if (this.refSubscription) {
-      this.refSubscription.unsubscribe();
     }
 
     this.sessionSubscription?.unsubscribe();

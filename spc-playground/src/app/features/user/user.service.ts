@@ -22,12 +22,12 @@ export class UserService implements OnDestroy {
   _session: AuthSession | null = null;
   user!: Object | undefined;
 
-  get session(): Session | null {
-    this.supabase.auth.getSession().then(({ data }) => {
-      this._session = data.session;
-    });
-
-    return this._session;
+  async getSession(): Promise<AuthSession | null> {
+    const { data, error } = await this.supabase.auth.getSession();
+    if (error) {
+      throw error;
+    }
+    return data.session;
   }
 
   get isLogged(): Object | null {
@@ -95,7 +95,9 @@ export class UserService implements OnDestroy {
   async uploadAvatar(fileName: string, avatarFile: File): Promise<any> {
     const generatedName = Date.now().toString();
     const nameToArray = fileName.split('.');
-    const newFileName = `${generatedName}.${nameToArray[nameToArray.length - 1]}`;
+    const newFileName = `${generatedName}.${
+      nameToArray[nameToArray.length - 1]
+    }`;
     const { data, error } = await this.supabase.storage
       .from('avatars')
       .upload(`avatars/${newFileName}`, avatarFile);
