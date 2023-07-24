@@ -20,6 +20,14 @@ export const authGuard: CanActivateFn = async (route, state) => {
     return false;
   } else if (choice === 'profile' && userSession !== null) {
     return true;
+  } else if (choice === 'profile' && userSession === null) {
+    router.navigate(['/login']);
+    return true;
+  } else if (choice === 'change-password' && userSession !== null) {
+    return true;
+  } else if (choice === 'change-password' && userSession === null) {
+    router.navigate(['/login']);
+    return false;
   } else {
     return false;
   }

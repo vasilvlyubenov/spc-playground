@@ -3,8 +3,6 @@ import {
   SupabaseClient,
   AuthSession,
   createClient,
-  AuthChangeEvent,
-  Session,
 } from '@supabase/supabase-js';
 import { BehaviorSubject, Observable, Subscription, defer, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -18,6 +16,7 @@ export class UserService implements OnDestroy {
 
   subscription!: Subscription;
   sessionSubscription: Subscription | undefined;
+  newPassSubscription: Subscription | undefined;
   private supabase: SupabaseClient;
   _session: AuthSession | null = null;
   user!: Object | undefined;
@@ -53,11 +52,15 @@ export class UserService implements OnDestroy {
     });
   }
 
-  authChanges(
-    callback: (event: AuthChangeEvent, session: Session | null) => void
-  ) {
-    return this.supabase.auth.onAuthStateChange(callback);
+  getUser():Observable<any> {
+    return defer(() => this.supabase.auth.getUser());
   }
+
+  // authChanges(
+  //   callback: (event: AuthChangeEvent, session: Session | null) => void
+  // ) {
+  //   return this.supabase.auth.onAuthStateChange(callback);
+  // }
 
   signUp(email: string, password: string): Observable<any> {
     const register$ = defer(() =>
@@ -75,7 +78,6 @@ export class UserService implements OnDestroy {
   }
 
   signOut(): Observable<any> {
-    this.removeToken();
     return defer(() => this.supabase.auth.signOut()).pipe(
       tap((data) => this.user$$.next(data))
     );
@@ -87,9 +89,14 @@ export class UserService implements OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-    this.sessionSubscription?.unsubscribe();
+  async updatePassword(password: string): Promise<Object | void>{
+    const {data, error } = await this.supabase.auth.updateUser({
+      password: password
+    })
+
+    if (error) {{
+      return error;
+    }}
   }
 
   async uploadAvatar(fileName: string, avatarFile: File): Promise<any> {
@@ -110,11 +117,9 @@ export class UserService implements OnDestroy {
     return data;
   }
 
-  setToken(token: string): void {
-    localStorage.setItem('refresh_token', token);
-  }
-
-  private removeToken(): void {
-    localStorage.removeItem('refresh_token');
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.sessionSubscription?.unsubscribe();
+    this.newPassSubscription?.unsubscribe();
   }
 }
