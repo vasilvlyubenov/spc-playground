@@ -3,6 +3,9 @@ import {
   SupabaseClient,
   AuthSession,
   createClient,
+  UserResponse,
+  AuthResponse,
+  AuthError
 } from '@supabase/supabase-js';
 import { BehaviorSubject, Observable, Subscription, defer, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -14,12 +17,11 @@ export class UserService implements OnDestroy {
   private user$$ = new BehaviorSubject<any>(undefined);
   public user$ = this.user$$.asObservable();
 
-  subscription!: Subscription;
+  userSubscription!: Subscription;
   sessionSubscription: Subscription | undefined;
   newPassSubscription: Subscription | undefined;
   private supabase: SupabaseClient;
-  _session: AuthSession | null = null;
-  user!: Object | undefined;
+  user!: UserResponse | undefined;
 
   async getSession(): Promise<AuthSession | null> {
     const { data, error } = await this.supabase.auth.getSession();
@@ -39,7 +41,7 @@ export class UserService implements OnDestroy {
       environment.supabaseKey
     );
 
-    this.subscription = this.user$.subscribe((user) => {
+    this.userSubscription = this.user$.subscribe((user) => {
       if (!user) {
         return;
       }
@@ -52,24 +54,18 @@ export class UserService implements OnDestroy {
     });
   }
 
-  getUser():Observable<any> {
+  getUser():Observable<UserResponse> {
     return defer(() => this.supabase.auth.getUser());
   }
 
-  // authChanges(
-  //   callback: (event: AuthChangeEvent, session: Session | null) => void
-  // ) {
-  //   return this.supabase.auth.onAuthStateChange(callback);
-  // }
-
-  signUp(email: string, password: string): Observable<any> {
+  signUp(email: string, password: string): Observable<AuthResponse> {
     const register$ = defer(() =>
       this.supabase.auth.signUp({ email, password })
     ).pipe(tap((data) => this.user$$.next(data)));
     return register$;
   }
 
-  signIn(email: string, password: string): Observable<any> {
+  signIn(email: string, password: string): Observable<AuthResponse> {
     const login$ = defer(() =>
       this.supabase.auth.signInWithPassword({ email, password })
     ).pipe(tap((data) => this.user$$.next(data)));
@@ -83,13 +79,13 @@ export class UserService implements OnDestroy {
     );
   }
 
-  refreshSession(data: any): Observable<any> {
+  refreshSession(data: any): Observable<AuthResponse> {
     return defer(() => this.supabase.auth.refreshSession(data)).pipe(
       tap((data) => this.user$$.next(data))
     );
   }
 
-  async updatePassword(password: string): Promise<Object | void>{
+  async updatePassword(password: string): Promise<AuthError | void>{
     const {data, error } = await this.supabase.auth.updateUser({
       password: password
     })
@@ -106,7 +102,25 @@ export class UserService implements OnDestroy {
       nameToArray[nameToArray.length - 1]
     }`;
     const { data, error } = await this.supabase.storage
-      .from('avatars')
+      .from('public')
+      .upload(`avatars/${newFileName}`, avatarFile);
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+
+    return data;
+  }
+
+  async uploadDrawing(fileName: string, avatarFile: File): Promise<any> {
+    const generatedName = Date.now().toString();
+    const nameToArray = fileName.split('.');
+    const newFileName = `${generatedName}.${
+      nameToArray[nameToArray.length - 1]
+    }`;
+    const { data, error } = await this.supabase.storage
+      .from('public')
       .upload(`avatars/${newFileName}`, avatarFile);
 
     if (error) {
@@ -118,7 +132,7 @@ export class UserService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.userSubscription.unsubscribe();
     this.sessionSubscription?.unsubscribe();
     this.newPassSubscription?.unsubscribe();
   }

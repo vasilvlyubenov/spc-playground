@@ -1,5 +1,5 @@
 <app-spinner *ngIf="isLoading"/>
-<div class="container">
+<div class="container" *ngIf="!isLoading">
   <mat-card>
     <mat-card-title>Register</mat-card-title>
     <mat-card-content>

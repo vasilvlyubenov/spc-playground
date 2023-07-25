@@ -1,4 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/features/user/user.service';
 
@@ -13,7 +14,7 @@ export class HeaderComponent implements OnDestroy {
   sessionSubscription: Subscription | undefined;
   session!: Object | null;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   get isLogged(): boolean {
     return !!this.userService.isLogged;
@@ -32,6 +33,7 @@ export class HeaderComponent implements OnDestroy {
     });
 
     this.isMenuCollapsed = true;
+    this.router.navigate(['/']);
   }
 
 

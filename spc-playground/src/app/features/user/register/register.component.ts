@@ -51,7 +51,6 @@ export class RegisterComponent implements OnDestroy {
 
         this.errorMessage = '';
         this.router.navigate(['/']);
-        // this.userService.setToken(data.session.refresh_token);
       },
       error: (err) => {
         console.error(err);

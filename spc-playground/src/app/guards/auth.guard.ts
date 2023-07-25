@@ -6,26 +6,38 @@ export const authGuard: CanActivateFn = async (route, state) => {
   const userService = inject(UserService);
   const router = inject(Router);
   const userSession = await userService.getSession();
-  const choice = route.url[0].path;
-
-  if (choice === 'parts') {
+  const path = route.url[0].path;
+  debugger
+  if (path === 'parts') {
     return true;
-  } else if (choice === 'login' && userSession !== null) {
+  } else if (path === 'login' && userSession !== null) {
     router.navigate(['/']);
     return false;
-  } else if (choice === 'login' && userSession === null) {
+  } else if (path === 'login' && userSession === null) {
     return true;
-  } else if (choice === 'register' && userSession !== null) {
+  } else if (path === 'register' && userSession !== null) {
     router.navigate(['/']);
     return false;
-  } else if (choice === 'profile' && userSession !== null) {
+  } else if (path === 'register' && userSession === null) {
     return true;
-  } else if (choice === 'profile' && userSession === null) {
+  } else if (path === 'profile' && userSession !== null) {
+    return true;
+  } else if (path === 'profile' && userSession === null) {
     router.navigate(['/login']);
     return true;
-  } else if (choice === 'change-password' && userSession !== null) {
+  } else if (path === 'change-password' && userSession !== null) {
     return true;
-  } else if (choice === 'change-password' && userSession === null) {
+  } else if (path === 'change-password' && userSession === null) {
+    router.navigate(['/login']);
+    return false;
+  } else if (path === 'add-drawing' && userSession !== null) {
+    return true;
+  } else if (path === 'add-drawing' && userSession === null) {
+    router.navigate(['/login']);
+    return false;
+  } else if (path === 'create-part' && userSession !== null) {
+    return true;
+  } else if (path === 'create-part' && userSession === null) {
     router.navigate(['/login']);
     return false;
   } else {
