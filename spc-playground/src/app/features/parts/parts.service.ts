@@ -4,7 +4,7 @@ import {
   createClient,
   PostgrestSingleResponse,
 } from '@supabase/supabase-js';
-import { Observable, Subscription, defer } from 'rxjs';
+import { Observable, defer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -22,6 +22,10 @@ export class PartsService {
 
   createDrawing(data: Object): Observable<PostgrestSingleResponse<null>> {
     return defer(() => this.supabase.from(`drawings`).insert(data));
+  }
+
+  getAllDrawings(): Observable<any> {
+    return defer(() => this.supabase.from('drawings').select());
   }
 
   async uploadAvatar(drawingName: string, drawingFile: File): Promise<any> {

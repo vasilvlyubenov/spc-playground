@@ -69,8 +69,9 @@ export class DrawingComponent implements OnDestroy {
       creator_id,
       file_url,
     }).subscribe({
-      next({data, error}) {
+      next: ({data, error}) => {
           if (error) {
+            this.errorMessage = error.message;
             throw error;
           }
       }

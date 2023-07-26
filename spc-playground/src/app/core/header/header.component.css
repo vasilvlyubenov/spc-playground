@@ -39,3 +39,7 @@ img {
     height: 28px;
     border-radius: 50%;
 }
+nav {
+    z-index: 1;
+    height: 87px;
+}
