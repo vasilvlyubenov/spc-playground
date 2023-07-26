@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { NgForm, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PartsService } from '../parts.service';
@@ -29,7 +29,8 @@ export class CreatePartComponent implements OnInit, OnDestroy {
 
   constructor(
     private partsService: PartsService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   createPartSubmitHandler(form: NgForm): void {
@@ -44,20 +45,31 @@ export class CreatePartComponent implements OnInit, OnDestroy {
       const control = new FormControl(''); // You can provide an initial value here if needed
 
       this.dynamicForm.addControl(controlName, control);
-      this.dynamicFormFields.push({ label, control, index: this.dynamicFormFields.length });
+      this.dynamicFormFields.push({
+        label,
+        control,
+        index: this.dynamicFormFields.length,
+      });
     }
   }
 
   addDimensionsSubmitHandler() {
     const formDataArray = [];
-      for (let i = 0; i < this.dynamicFormFields.length; i += 3) {
-        const formDataObject: { [key: string]: string } = {};
-        for (let j = i; j < i + 3 && j < this.dynamicFormFields.length; j++) {
-          formDataObject[this.dynamicFormFields[j].label] = this.dynamicFormFields[j].control.value;
-        }
-        formDataArray.push(formDataObject);
+    const remainingFields = this.dynamicFormFields.slice(0); // Create a copy of dynamicFormFields array
+
+    // Filter out fields that have been removed and construct formDataArray
+    while (remainingFields.length > 0) {
+      const formDataObject: { [key: string]: string } = {};
+      for (let j = 0; j < this.keys.length && remainingFields.length > 0; j++) {
+        formDataObject[this.keys[j]] = remainingFields.shift()!.control.value;
       }
-      console.log('Generated JSON Array:', JSON.stringify(formDataArray, null, 2));
+      formDataArray.push(formDataObject);
+    }
+
+    console.log(
+      'Generated JSON Array:',
+      JSON.stringify(formDataArray, null, 2)
+    );
   }
 
   addFields() {
@@ -66,30 +78,34 @@ export class CreatePartComponent implements OnInit, OnDestroy {
 
   removeFieldsMultiple() {
     const currentFieldCount = this.dynamicFormFields.length;
-    if (currentFieldCount >= 3) {
-      const lastFieldIndexToRemove = currentFieldCount - (currentFieldCount % 3 || 3);
-      this.removeFields(lastFieldIndexToRemove);
-    }
+    const lastFieldIndexToRemove =
+      currentFieldCount - (currentFieldCount % 3 || 3);
+    this.removeFields(lastFieldIndexToRemove);
   }
 
   private removeFields(index: number) {
     if (this.dynamicFormFields.length > index) {
-      const controlsToRemove = this.dynamicFormFields.splice(index, 3);
-      controlsToRemove.forEach((field) => {
+      const fieldsToRemove = this.dynamicFormFields.splice(index, 3);
+
+      fieldsToRemove.forEach((field) => {
         const controlName = `field_${field.index}`;
         this.dynamicForm.removeControl(controlName);
       });
+
       this.relabelDynamicFormFields();
+      this.changeDetector.detectChanges();
     }
   }
 
   private relabelDynamicFormFields() {
     for (let i = 0; i < this.dynamicFormFields.length; i++) {
-      const controlName = `field_${i}`;
-      const label = this.keys[i];
-      this.dynamicForm.setControl(controlName, this.dynamicFormFields[i].control);
+      const controlName = `field_${this.dynamicFormFields[i].index}`;
+      const label = this.keys[i % 3];
+      this.dynamicForm.setControl(
+        controlName,
+        this.dynamicFormFields[i].control
+      );
       this.dynamicFormFields[i].label = label;
-      this.dynamicFormFields[i].index = i;
     }
   }
 

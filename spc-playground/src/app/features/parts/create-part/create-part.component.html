@@ -44,7 +44,7 @@
 
     <ng-container *ngIf="partSubmitted">
         <mat-card>
-            <mat-card-title>Add SPC dimensions</mat-card-title>
+            <mat-card-title>Add SPC dimension/s</mat-card-title>
             <mat-card-content>
                 <mat-error *ngIf="errorMessageForDim">{{errorMessage}}</mat-error>
                 <form [formGroup]="dynamicForm" (ngSubmit)="addDimensionsSubmitHandler()">
@@ -57,10 +57,10 @@
                         </mat-form-field>
                     </div>
                     </ng-container>
-                  
-                    <button mat-raised-button color="accent" (click)="addFields()">Add aimension</button>
-                    
-                    <button mat-raised-button color="warn" (click)="removeFieldsMultiple()">Remove dimension</button>
+                  <div class="buttons">
+                    <button mat-raised-button color="accent" type="button" (click)="addFields()">Add aimension</button>
+                    <button mat-raised-button color="warn" type="button" (click)="removeFieldsMultiple()">Remove dimension</button>
+                </div>
                     <button mat-raised-button color="primary" type="submit">Submit</button>
                   </form>                  
 
