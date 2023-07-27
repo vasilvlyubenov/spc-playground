@@ -4,12 +4,8 @@ import { Subscription } from 'rxjs';
 import { PartsService } from '../parts.service';
 import { IDrawing } from 'src/app/interfaces/Drawing';
 import { IPart } from 'src/app/interfaces/Part';
+import { IDynamicFormFields } from 'src/app/interfaces/DynamicFormFields';
 
-interface IDynamicFormField {
-  index: number;
-  label: string;
-  control: FormControl;
-}
 
 @Component({
   selector: 'app-create-part',
@@ -22,7 +18,8 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   drawingSubscription!: Subscription;
   drawings!: Array<IDrawing>;
   dynamicForm!: FormGroup;
-  dynamicFormFields: IDynamicFormField[] = [];
+  dynamicFormFields: IDynamicFormFields[] = [];
+  names: Array<string> = ['Dimension', 'Upper limit', 'Lower limit']
   keys: Array<string> = ['dimension', 'upperLimit', 'lowerLimit'];
   partSubmitted: boolean = false;
   errorMessageForDim: string = '';
@@ -42,23 +39,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
 
     this.partObject = form.form.value;
 
-    console.log(this.partObject);
     this.partSubmitted = true;
-  }
-
-  createDynamicFormFields(keys: string[]): void {
-    for (let i = 0; i < keys.length; i++) {
-      const controlName = `field_${i}`;
-      const label = keys[i];
-      const control = new FormControl('');
-
-      this.dynamicForm.addControl(controlName, control);
-      this.dynamicFormFields.push({
-        label,
-        control,
-        index: this.dynamicFormFields.length,
-      });
-    }
   }
 
   addDimensionsSubmitHandler() {
@@ -73,7 +54,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   }
 
   addFields() {
-    this.createDynamicFormFields(this.keys);
+    this.createDynamicFormFields();
   }
 
   removeFieldsMultiple() {
@@ -81,6 +62,23 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     const lastFieldIndexToRemove =
       currentFieldCount - (currentFieldCount % 3 || 3);
     this.removeFields(lastFieldIndexToRemove);
+  }
+
+  private createDynamicFormFields(): void {
+    for (let i = 0; i < this.keys.length; i++) {
+      const controlName = this.keys[i];
+      const label = this.keys[i];
+      const name = this.names[i];
+      const control = new FormControl('');
+
+      this.dynamicForm.addControl(controlName, control);
+      this.dynamicFormFields.push({
+        label,
+        control,
+        name,
+        index: this.dynamicFormFields.length,
+      });
+    }
   }
 
   private removeFields(index: number) {
@@ -109,7 +107,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     }
   }
 
-  private dimensionsInputFieldsHandler(fieldsArray: Array<IDynamicFormField>): Array<Object> {
+  private dimensionsInputFieldsHandler(fieldsArray: Array<IDynamicFormFields>): Array<Object> {
     const formDataArray = [];
     const remainingFields = fieldsArray.slice(0); // Create a copy of dynamicFormFields array
 

@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { UserService } from '../user.service';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -19,7 +19,7 @@ export class LoginComponent implements OnDestroy {
 
   submitLoginHandler(form: NgForm): string | void {
     if (form.invalid) {
-      return (this.errorMessage = 'Please try again!');
+      return this.errorMessage = 'Please try again!';
     }
     this.isLoading = true;
     

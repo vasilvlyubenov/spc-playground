@@ -1,19 +1,25 @@
-<app-spinner *ngIf="isLoading"/>
+<app-spinner *ngIf="isLoading" />
 <div class="container" *ngIf="!isLoading">
-    <mat-card>
-      <mat-card-title>Login</mat-card-title>
-      <mat-card-content>
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
       <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
-        <form #form="ngForm" (ngSubmit)="submitLoginHandler(form)">
-          <mat-form-field>
-            <input matInput type="email" placeholder="Email" name="email"  ngModel required>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput type="password" placeholder="Password" name="password" ngModel required>
-          </mat-form-field>
-          <button mat-raised-button color="primary">Login</button>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  
+      <form #loginForm="ngForm" (ngSubmit)="submitLoginHandler(loginForm)">
+        <mat-form-field>
+          <input matInput type="email" placeholder="Email" name="email" ngModel email required #emailInput="ngModel">
+          <ng-container *ngIf="emailInput.touched">
+            <mat-error *ngIf="emailInput.errors?.['required']">Email is required</mat-error>
+            <mat-error *ngIf="emailInput.errors?.['email']">Email is invalid</mat-error>
+          </ng-container>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="password" placeholder="Password" name="password" ngModel required minlength="6" #passwordInput="ngModel">
+          <ng-container *ngIf="passwordInput.touched">
+            <mat-error *ngIf="passwordInput.errors?.['minlength']">Password must be at least 6 symbols</mat-error>
+          </ng-container>
+        </mat-form-field>
+        <button mat-raised-button color="primary">Login</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

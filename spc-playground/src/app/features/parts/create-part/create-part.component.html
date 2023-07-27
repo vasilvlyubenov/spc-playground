@@ -45,16 +45,16 @@
     <!-- Dimensions form  -->
     <ng-container *ngIf="partSubmitted">
         <mat-card>
-            <mat-card-title>Add SPC dimension/s</mat-card-title>
+            <mat-card-title>SPC dimension/s</mat-card-title>
             <mat-card-content>
                 <mat-error *ngIf="errorMessageForDim">{{errorMessage}}</mat-error>
                 <form [formGroup]="dynamicForm" (ngSubmit)="addDimensionsSubmitHandler()">
                     <!-- Dynamic input fields -->
-                    <ng-container *ngFor="let field of dynamicFormFields; let i = index">
+                    <ng-container *ngFor="let field of dynamicFormFields">
                         <div class="field-group">
                             <mat-form-field appearance="fill">
-                                <mat-label>{{ field.label }}</mat-label>
-                                <input matInput [formControl]="field.control" [placeholder]="field.label" />
+                                <mat-label>{{ field.name }}</mat-label>
+                                <input matInput [formControl]="field.control" [placeholder]="field.name" />
                             </mat-form-field>
                         </div>
                     </ng-container>
