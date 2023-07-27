@@ -3,6 +3,7 @@ import { NgForm, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PartsService } from '../parts.service';
 import { IDrawing } from 'src/app/interfaces/Drawing';
+import { IPart } from 'src/app/interfaces/Part';
 
 interface IDynamicFormField {
   index: number;
@@ -34,7 +35,8 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   ) {}
 
   createPartSubmitHandler(form: NgForm): void {
-    console.log(form.form.value);
+    const part: IPart = form.form.value;
+    console.log(part);
     this.partSubmitted = true;
   }
 
