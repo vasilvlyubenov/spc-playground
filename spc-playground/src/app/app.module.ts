@@ -14,7 +14,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserModule } from './features/user/user.module';
 import { PageNotFoundModule } from './page404/page-not-found.module';
-import { HttpClientModule } from '@angular/common/http'
 import { PartsModule } from './features/parts/parts.module';
 
 
@@ -28,15 +27,14 @@ PlotlyModule.plotlyjs = PlotlyJS;
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     PlotlyModule,
     CoreModule,
     SharedModule,
     NgbModule,
     UserModule,
     PartsModule,
-    HttpClientModule,
     PageNotFoundModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
