@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css'],
 })
-export class ChangePasswordComponent {
-  isLoading: boolean = false;
+export class ChangePasswordComponent implements OnDestroy {
   errorMessage: string = '';
+  updatePassSubscription!: Subscription;
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router, private snackBar: MatSnackBar) {}
 
-  async submitChangePasswordHandler(form: NgForm): Promise<string | void> {
+  submitChangePasswordHandler(form: NgForm): string | void {
     if (form.invalid) {
       return (this.errorMessage = 'Please try again!');
     }
@@ -24,17 +26,27 @@ export class ChangePasswordComponent {
     if (newPassword !== repNewPassword) {
       return (this.errorMessage = "Password doesn't match!");
     }
-    this.isLoading = true;
-    const error = await this.userService.updatePassword(newPassword);
-      
-    if (error) {
-      this.isLoading = false;
-      this.errorMessage = 'New password should be different from the old password.'
-      throw error;
-    }
+  
+    this.updatePassSubscription = this.userService
+      .updatePassword(newPassword)
+      .subscribe({
+        next: ({ data, error }) => {
+          if (error) {
+            return this.errorMessage = error.message;
+          }
+          this.errorMessage = '';
+          form.reset();
+          this.snackBar.open('Success', 'Close', {
+            duration: 5000,
+          });
+        },
+      });
 
-    this.errorMessage = '';
-    this.router.navigate(['/']);
-    this.isLoading = false;
+  }
+
+  ngOnDestroy(): void {
+    if (this.updatePassSubscription) {
+      this.updatePassSubscription.unsubscribe();
+    }
   }
 }

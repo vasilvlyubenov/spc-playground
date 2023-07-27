@@ -3,7 +3,7 @@ footer {
     position: relative;
     bottom: 0;
     width: 100%;
-    min-height: 1.5rem;
+    height: 27px;
 }
 
 footer p {

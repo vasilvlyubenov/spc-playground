@@ -5,7 +5,6 @@ import {
   createClient,
   UserResponse,
   AuthResponse,
-  AuthError
 } from '@supabase/supabase-js';
 import { BehaviorSubject, Observable, Subscription, defer, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -85,14 +84,8 @@ export class UserService implements OnDestroy {
     );
   }
 
-  async updatePassword(password: string): Promise<AuthError | void>{
-    const {data, error } = await this.supabase.auth.updateUser({
-      password: password
-    })
-
-    if (error) {{
-      return error;
-    }}
+  updatePassword(password: string): Observable<any>{
+    return defer(() =>  this.supabase.auth.updateUser({password: password}));
   }
 
   async uploadAvatar(fileName: string, avatarFile: File): Promise<any> {
