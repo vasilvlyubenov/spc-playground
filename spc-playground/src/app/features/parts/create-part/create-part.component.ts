@@ -23,10 +23,10 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   drawings!: Array<IDrawing>;
   dynamicForm!: FormGroup;
   dynamicFormFields: IDynamicFormField[] = [];
-  dynamicFormFieldsCount: number = 3;
   keys: Array<string> = ['dimension', 'upperLimit', 'lowerLimit'];
   partSubmitted: boolean = false;
   errorMessageForDim: string = '';
+  partObject!: IPart;
 
   constructor(
     private partsService: PartsService,
@@ -34,9 +34,15 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     private changeDetector: ChangeDetectorRef
   ) {}
 
-  createPartSubmitHandler(form: NgForm): void {
-    const part: IPart = form.form.value;
-    console.log(part);
+  createPartSubmitHandler(form: NgForm): string | void {
+
+    if (form.invalid) {
+      return this.errorMessage = 'Please try again';
+    }
+
+    this.partObject = form.form.value;
+
+    console.log(this.partObject);
     this.partSubmitted = true;
   }
 
@@ -44,7 +50,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     for (let i = 0; i < keys.length; i++) {
       const controlName = `field_${i}`;
       const label = keys[i];
-      const control = new FormControl(''); // You can provide an initial value here if needed
+      const control = new FormControl('');
 
       this.dynamicForm.addControl(controlName, control);
       this.dynamicFormFields.push({
@@ -56,21 +62,13 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   }
 
   addDimensionsSubmitHandler() {
-    const formDataArray = [];
-    const remainingFields = this.dynamicFormFields.slice(0); // Create a copy of dynamicFormFields array
-
-    // Filter out fields that have been removed and construct formDataArray
-    while (remainingFields.length > 0) {
-      const formDataObject: { [key: string]: string } = {};
-      for (let j = 0; j < this.keys.length && remainingFields.length > 0; j++) {
-        formDataObject[this.keys[j]] = remainingFields.shift()!.control.value;
-      }
-      formDataArray.push(formDataObject);
-    }
-
+    const dimensionsArray = this.dimensionsInputFieldsHandler(this.dynamicFormFields);
+    this.partObject.spc_dimensions = JSON.stringify(dimensionsArray);
+    console.log(this.partObject);
+    
     console.log(
       'Generated JSON Array:',
-      JSON.stringify(formDataArray, null, 2)
+      JSON.stringify(dimensionsArray, null, 2)
     );
   }
 
@@ -111,9 +109,24 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     }
   }
 
+  private dimensionsInputFieldsHandler(fieldsArray: Array<IDynamicFormField>): Array<Object> {
+    const formDataArray = [];
+    const remainingFields = fieldsArray.slice(0); // Create a copy of dynamicFormFields array
+
+    // Filter out fields that have been removed and construct formDataArray
+    while (remainingFields.length > 0) {
+      const formDataObject: { [key: string]: string } = {};
+      for (let j = 0; j < this.keys.length && remainingFields.length > 0; j++) {
+        formDataObject[this.keys[j]] = remainingFields.shift()!.control.value;
+      }
+      formDataArray.push(formDataObject);
+    }
+
+    return formDataArray;
+  }
+
   ngOnInit(): void {
     this.dynamicForm = this.formBuilder.group({});
-    this.createDynamicFormFields(this.keys);
 
     this.drawingSubscription = this.partsService.getAllDrawings().subscribe({
       next: ({ data, error }) => {

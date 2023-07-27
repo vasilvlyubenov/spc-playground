@@ -3,8 +3,8 @@ export interface IPart {
     part_name: string,
     part_number: string,
     part_index: string,
-    control_dimensions: JSON | null,
-    spc_dimensions: JSON | null;
+    control_dimensions: string | null,
+    spc_dimensions: string | null;
     drawing_id: number,
     creator_id: string
 }

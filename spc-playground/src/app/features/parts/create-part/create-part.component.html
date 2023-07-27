@@ -35,13 +35,14 @@
                             </mat-datepicker-actions>
                         </mat-datepicker>
                     </mat-form-field>
-                    <button mat-raised-button color="primary">Submit</button>
+                    <button mat-raised-button color="primary">Next</button>
                 </form>
 
             </mat-card-content>
         </mat-card>
     </ng-container>
 
+    <!-- Dimensions form  -->
     <ng-container *ngIf="partSubmitted">
         <mat-card>
             <mat-card-title>Add SPC dimension/s</mat-card-title>
@@ -50,19 +51,21 @@
                 <form [formGroup]="dynamicForm" (ngSubmit)="addDimensionsSubmitHandler()">
                     <!-- Dynamic input fields -->
                     <ng-container *ngFor="let field of dynamicFormFields; let i = index">
-                      <div class="field-group">
-                        <mat-form-field appearance="fill">
-                          <mat-label>{{ field.label }}</mat-label>
-                          <input matInput [formControl]="field.control" [placeholder]="field.label" />
-                        </mat-form-field>
-                    </div>
+                        <div class="field-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input matInput [formControl]="field.control" [placeholder]="field.label" />
+                            </mat-form-field>
+                        </div>
                     </ng-container>
-                  <div class="buttons">
-                    <button mat-raised-button color="accent" type="button" (click)="addFields()">Add aimension</button>
-                    <button mat-raised-button color="warn" type="button" (click)="removeFieldsMultiple()">Remove dimension</button>
-                </div>
+                    <div class="buttons">
+                        <button mat-raised-button color="accent" type="button" (click)="addFields()">Add
+                            dimension</button>
+                        <button mat-raised-button color="warn" type="button" (click)="removeFieldsMultiple()">Remove
+                            dimension</button>
+                    </div>
                     <button mat-raised-button color="primary" type="submit">Submit</button>
-                  </form>                  
+                </form>
 
             </mat-card-content>
         </mat-card>

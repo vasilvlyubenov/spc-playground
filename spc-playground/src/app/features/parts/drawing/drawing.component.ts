@@ -49,7 +49,7 @@ export class DrawingComponent implements OnDestroy {
     this.isLoading = true;
 
     try {
-      const uploadResult = await this.partsService.uploadAvatar(
+      const uploadResult = await this.partsService.uploadDrawingFile(
         drawing.name,
         drawing
       );

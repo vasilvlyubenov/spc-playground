@@ -28,7 +28,7 @@ export class PartsService {
     return defer(() => this.supabase.from('drawings').select());
   }
 
-  async uploadAvatar(drawingName: string, drawingFile: File): Promise<any> {
+  async uploadDrawingFile(drawingName: string, drawingFile: File): Promise<any> {
     const generatedName = Date.now().toString();
     const nameToArray = drawingName.split('.');
     const newFileName = `${generatedName}.${
@@ -45,7 +45,7 @@ export class PartsService {
     return data;
   }
 
-  async getFile(filePath: string): Promise<any> {
+  async getDrawingFile(filePath: string): Promise<any> {
     const { data , error } = await this.supabase.storage
       .from('public')
       .download(filePath);
