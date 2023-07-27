@@ -25,7 +25,7 @@ export class DrawingComponent implements OnDestroy {
     let file_url = '';
 
     if (form.invalid) {
-      return (this.errorMessage = 'Please try again!');
+      return
     }
     
     const {

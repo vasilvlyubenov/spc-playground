@@ -8,24 +8,36 @@
                 <form #form="ngForm" (ngSubmit)="createPartSubmitHandler(form)">
                     <mat-form-field>
                         <mat-label>Select</mat-label>
-                        <mat-select type="text" name="drawing_id" ngModel required>
+                        <mat-select type="text" name="drawing_id" ngModel required #drawingIdInput="ngModel">
                             <ng-container *ngFor="let drawing of drawings">
                                 <mat-option [value]="drawing.id">{{drawing.drawing_number}}</mat-option>
                             </ng-container>
                         </mat-select>
+                        <ng-container *ngIf="drawingIdInput.touched">
+                            <mat-error *ngIf="drawingIdInput.errors?.['required']">Drawing selection is required</mat-error>
+                          </ng-container>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Part name" name="part_name" ngModel required>
+                        <input matInput type="text" placeholder="Part name" name="part_name" ngModel required #partNameInput="ngModel">
+                        <ng-container *ngIf="partNameInput.touched">
+                            <mat-error *ngIf="partNameInput.errors?.['required']">Part name is required</mat-error>
+                          </ng-container>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Part number" name="part_number" ngModel required>
+                        <input matInput type="text" placeholder="Part number" name="part_number" ngModel required #partNumberInput="ngModel">
+                        <ng-container *ngIf="partNumberInput.touched">
+                            <mat-error *ngIf="partNumberInput.errors?.['required']">Drawing selection is required</mat-error>
+                          </ng-container>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Index" name="part_index" ngModel required>
+                        <input matInput type="text" placeholder="Index" name="part_index" ngModel required #partIndexInput="ngModel">
+                        <ng-container *ngIf="partIndexInput.touched">
+                            <mat-error *ngIf="partIndexInput.errors?.['required']">Drawing selection is required</mat-error>
+                          </ng-container>
                     </mat-form-field>
                     <mat-form-field class="example-form-field">
                         <mat-label>Choose revision date</mat-label>
-                        <input matInput [matDatepicker]="datepicker" name="revision_date" ngModel required>
+                        <input matInput [matDatepicker]="datepicker" name="revision_date" ngModel required #revisionDateInput="ngModel">
                         <mat-hint>MM/DD/YYYY</mat-hint>
                         <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
                         <mat-datepicker #datepicker>
@@ -34,6 +46,9 @@
                                 <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
                             </mat-datepicker-actions>
                         </mat-datepicker>
+                        <ng-container *ngIf="revisionDateInput.touched">
+                            <mat-error *ngIf="revisionDateInput.errors?.['required']">Drawing selection is required</mat-error>
+                          </ng-container>
                     </mat-form-field>
                     <button mat-raised-button color="primary">Next</button>
                 </form>
@@ -54,12 +69,16 @@
                         <div class="field-group">
                             <mat-form-field appearance="fill">
                                 <mat-label>{{ field.name }}</mat-label>
-                                <input matInput [formControl]="field.control" [placeholder]="field.name" />
+                                <input matInput [formControl]="field.control" [placeholder]="field.name" [formControlName]="field.label"/>
+                                <ng-container *ngIf="dynamicForm.get(field.label)?.touched">
+                                    <mat-error *ngIf="dynamicForm.get(field.label)?.errors?.['required']">{{field.name}} is required</mat-error>
+                                    <mat-error *ngIf="dynamicForm.get(field.label)?.errors?.['pattern']">{{field.name}} must be a number</mat-error>
+                                </ng-container>
                             </mat-form-field>
                         </div>
                     </ng-container>
                     <div class="buttons">
-                        <button mat-raised-button color="accent" type="button" (click)="addFields()">Add
+                        <button mat-raised-button color="accent" type="button" (click)="createDynamicFormFields()">Add
                             dimension</button>
                         <button mat-raised-button color="warn" type="button" (click)="removeFieldsMultiple()">Remove
                             dimension</button>

@@ -15,7 +15,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CreatePartComponent } from './create-part/create-part.component';
 import { MatSelectModule } from '@angular/material/select';
-import {ReactiveFormsModule} from '@angular/forms'
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [DrawingComponent, CreatePartComponent],
@@ -34,7 +34,7 @@ import {ReactiveFormsModule} from '@angular/forms'
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
 })
 export class PartsModule {}

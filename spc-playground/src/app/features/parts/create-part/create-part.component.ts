@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { NgForm, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { NgForm, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PartsService } from '../parts.service';
 import { IDrawing } from 'src/app/interfaces/Drawing';
@@ -31,6 +31,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     private changeDetector: ChangeDetectorRef
   ) {}
 
+  //Handling the Part form and showing the dimension form
   createPartSubmitHandler(form: NgForm): string | void {
 
     if (form.invalid) {
@@ -42,6 +43,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     this.partSubmitted = true;
   }
 
+  //Handling the Dimensions form and inserting the data to db
   addDimensionsSubmitHandler() {
     const dimensionsArray = this.dimensionsInputFieldsHandler(this.dynamicFormFields);
     this.partObject.spc_dimensions = JSON.stringify(dimensionsArray);
@@ -53,10 +55,25 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     );
   }
 
-  addFields() {
-    this.createDynamicFormFields();
-  }
+  //Method which creates the fileds and pushes them in array which will be visualized
+ createDynamicFormFields(): void {
+  for (let i = 0; i < this.keys.length; i++) {
+    const controlName = this.keys[i];
+    const label = this.keys[i];
+    const name = this.names[i];
+    const control = new FormControl('', [Validators.required, Validators.pattern('/^\d*\.?\d+$/')]);
 
+    this.dynamicForm.addControl(controlName, control);
+    this.dynamicFormFields.push({
+      label,
+      control,
+      name,
+      index: this.dynamicFormFields.length,
+    });
+  }
+}
+
+//Method for removing the required number of fields
   removeFieldsMultiple() {
     const currentFieldCount = this.dynamicFormFields.length;
     const lastFieldIndexToRemove =
@@ -64,48 +81,34 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     this.removeFields(lastFieldIndexToRemove);
   }
 
-  private createDynamicFormFields(): void {
-    for (let i = 0; i < this.keys.length; i++) {
-      const controlName = this.keys[i];
-      const label = this.keys[i];
-      const name = this.names[i];
-      const control = new FormControl('');
 
-      this.dynamicForm.addControl(controlName, control);
-      this.dynamicFormFields.push({
-        label,
-        control,
-        name,
-        index: this.dynamicFormFields.length,
-      });
-    }
-  }
-
+//Private method for generally removing a field
   private removeFields(index: number) {
     if (this.dynamicFormFields.length > index) {
       const fieldsToRemove = this.dynamicFormFields.splice(index, 3);
 
       fieldsToRemove.forEach((field) => {
-        const controlName = `field_${field.index}`;
+        const controlName = field.label;
         this.dynamicForm.removeControl(controlName);
       });
-
-      this.relabelDynamicFormFields();
+      
+      // this.relabelDynamicFormFields();
       this.changeDetector.detectChanges();
     }
   }
 
-  private relabelDynamicFormFields() {
-    for (let i = 0; i < this.dynamicFormFields.length; i++) {
-      const controlName = `field_${this.dynamicFormFields[i].index}`;
-      const label = this.keys[i % 3];
-      this.dynamicForm.setControl(
-        controlName,
-        this.dynamicFormFields[i].control
-      );
-      this.dynamicFormFields[i].label = label;
-    }
-  }
+  //Method which relabels the fields after deletion - unnecessary as the logic was fixed
+  // private relabelDynamicFormFields() {
+  //   for (let i = 0; i < this.dynamicFormFields.length; i++) {
+  //     const controlName = `field_${this.dynamicFormFields[i].index}`;
+  //     const label = this.keys[i % 3];
+  //     this.dynamicForm.setControl(
+  //       controlName,
+  //       this.dynamicFormFields[i].control
+  //     );
+  //     this.dynamicFormFields[i].label = label;
+  //   }
+  // }
 
   private dimensionsInputFieldsHandler(fieldsArray: Array<IDynamicFormFields>): Array<Object> {
     const formDataArray = [];
@@ -123,6 +126,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     return formDataArray;
   }
 
+  //creating the form group and loading the drawing numbers from db
   ngOnInit(): void {
     this.dynamicForm = this.formBuilder.group({});
 

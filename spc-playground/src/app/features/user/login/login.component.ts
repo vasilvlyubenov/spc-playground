@@ -17,9 +17,9 @@ export class LoginComponent implements OnDestroy {
 
   constructor(private userService: UserService, private router: Router) {}
 
-  submitLoginHandler(form: NgForm): string | void {
+  submitLoginHandler(form: NgForm): void {
     if (form.invalid) {
-      return this.errorMessage = 'Please try again!';
+      return
     }
     this.isLoading = true;
     
