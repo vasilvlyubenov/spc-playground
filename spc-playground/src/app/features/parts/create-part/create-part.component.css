@@ -13,16 +13,16 @@
   
   mat-card-title {
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.5rem;
   }
   
   mat-form-field {
     width: 100%;
   }
   
-  button {
+  /* button {
     width: 100%;
-  }
+  } */
   
 .imageField {
   height: 78px;
@@ -34,5 +34,16 @@
 
 .buttons {
   display: flex;
+  flex-direction: row;
   margin-bottom: 1rem;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+}
+
+.field-group {
+  display: flex;
+  align-items: flex-start;
 }

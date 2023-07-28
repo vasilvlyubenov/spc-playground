@@ -1,11 +1,16 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { NgForm, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  NgForm,
+  FormBuilder,
+  Validators,
+  FormArray,
+  FormGroup,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PartsService } from '../parts.service';
 import { IDrawing } from 'src/app/interfaces/Drawing';
 import { IPart } from 'src/app/interfaces/Part';
 import { IDynamicFormFields } from 'src/app/interfaces/DynamicFormFields';
-
 
 @Component({
   selector: 'app-create-part',
@@ -17,119 +22,64 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
   drawingSubscription!: Subscription;
   drawings!: Array<IDrawing>;
-  dynamicForm!: FormGroup;
-  dynamicFormFields: IDynamicFormFields[] = [];
-  names: Array<string> = ['Dimension', 'Upper limit', 'Lower limit']
-  keys: Array<string> = ['dimension', 'upperLimit', 'lowerLimit'];
   partSubmitted: boolean = false;
   errorMessageForDim: string = '';
   partObject!: IPart;
 
+  // My implementation
+  dynamicFormGroup!: FormGroup;
+  dynamicFormArray!: FormArray;
+
   constructor(
     private partsService: PartsService,
     private formBuilder: FormBuilder,
-    private changeDetector: ChangeDetectorRef
   ) {}
 
   //Handling the Part form and showing the dimension form
   createPartSubmitHandler(form: NgForm): string | void {
-
     if (form.invalid) {
-      return this.errorMessage = 'Please try again';
+      return;
     }
-
     this.partObject = form.form.value;
-
     this.partSubmitted = true;
   }
 
   //Handling the Dimensions form and inserting the data to db
   addDimensionsSubmitHandler() {
-    const dimensionsArray = this.dimensionsInputFieldsHandler(this.dynamicFormFields);
-    this.partObject.spc_dimensions = JSON.stringify(dimensionsArray);
-    console.log(this.partObject);
-    
-    console.log(
-      'Generated JSON Array:',
-      JSON.stringify(dimensionsArray, null, 2)
-    );
+    //TODO
   }
 
-  //Method which creates the fileds and pushes them in array which will be visualized
- createDynamicFormFields(): void {
-  for (let i = 0; i < this.keys.length; i++) {
-    const controlName = this.keys[i];
-    const label = this.keys[i];
-    const name = this.names[i];
-    const control = new FormControl('', [Validators.required, Validators.pattern('/^\d*\.?\d+$/')]);
+  get dimensions() {
+    return this.dynamicFormGroup.get('dimensions') as FormArray
+  }
 
-    this.dynamicForm.addControl(controlName, control);
-    this.dynamicFormFields.push({
-      label,
-      control,
-      name,
-      index: this.dynamicFormFields.length,
+  basicForm(): FormGroup {
+    return this.formBuilder.group({
+      dimension: ['', [
+        Validators.required,
+        Validators.pattern('^\\d*\\.?\\d+$'),
+      ]],
+      upperLimit: ['', [
+        Validators.required,
+        Validators.pattern('^\\d*\\.?\\d+$'),
+      ]],
+      lowerLimit: ['', [
+        Validators.required,
+        Validators.pattern('^\\d*\\.?\\d+$'),
+      ]],
     });
   }
-}
 
-//Method for removing the required number of fields
-  removeFieldsMultiple() {
-    const currentFieldCount = this.dynamicFormFields.length;
-    const lastFieldIndexToRemove =
-      currentFieldCount - (currentFieldCount % 3 || 3);
-    this.removeFields(lastFieldIndexToRemove);
+
+  addNewForm(): void {
+    this.dimensions.push(this.basicForm());
   }
 
-
-//Private method for generally removing a field
-  private removeFields(index: number) {
-    if (this.dynamicFormFields.length > index) {
-      const fieldsToRemove = this.dynamicFormFields.splice(index, 3);
-
-      fieldsToRemove.forEach((field) => {
-        const controlName = field.label;
-        this.dynamicForm.removeControl(controlName);
-      });
-      
-      // this.relabelDynamicFormFields();
-      this.changeDetector.detectChanges();
-    }
+  removeForm(i: number): void {
+    this.dimensions.removeAt(i);
   }
 
-  //Method which relabels the fields after deletion - unnecessary as the logic was fixed
-  // private relabelDynamicFormFields() {
-  //   for (let i = 0; i < this.dynamicFormFields.length; i++) {
-  //     const controlName = `field_${this.dynamicFormFields[i].index}`;
-  //     const label = this.keys[i % 3];
-  //     this.dynamicForm.setControl(
-  //       controlName,
-  //       this.dynamicFormFields[i].control
-  //     );
-  //     this.dynamicFormFields[i].label = label;
-  //   }
-  // }
-
-  private dimensionsInputFieldsHandler(fieldsArray: Array<IDynamicFormFields>): Array<Object> {
-    const formDataArray = [];
-    const remainingFields = fieldsArray.slice(0); // Create a copy of dynamicFormFields array
-
-    // Filter out fields that have been removed and construct formDataArray
-    while (remainingFields.length > 0) {
-      const formDataObject: { [key: string]: string } = {};
-      for (let j = 0; j < this.keys.length && remainingFields.length > 0; j++) {
-        formDataObject[this.keys[j]] = remainingFields.shift()!.control.value;
-      }
-      formDataArray.push(formDataObject);
-    }
-
-    return formDataArray;
-  }
-
-  //creating the form group and loading the drawing numbers from db
   ngOnInit(): void {
-    this.dynamicForm = this.formBuilder.group({});
-
     this.drawingSubscription = this.partsService.getAllDrawings().subscribe({
       next: ({ data, error }) => {
         this.isLoading = true;
@@ -143,9 +93,14 @@ export class CreatePartComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
     });
+
+    this.dynamicFormGroup = this.formBuilder.group({
+      dimensions: this.formBuilder.array([])
+    });
   }
 
   ngOnDestroy(): void {
     this.drawingSubscription.unsubscribe();
   }
+
 }

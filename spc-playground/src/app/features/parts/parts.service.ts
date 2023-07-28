@@ -5,6 +5,7 @@ import {
   PostgrestSingleResponse,
 } from '@supabase/supabase-js';
 import { Observable, defer } from 'rxjs';
+import { IPart } from 'src/app/interfaces/Part';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -55,5 +56,9 @@ export class PartsService {
       }
 
       return data;
+  }
+
+  createPart(part: IPart): Observable<any> {
+    return defer(() => this.supabase.from('parts').insert(part));
   }
 }

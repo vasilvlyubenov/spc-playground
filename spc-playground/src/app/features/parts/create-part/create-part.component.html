@@ -1,6 +1,6 @@
 <app-spinner *ngIf="isLoading" />
 <div class="container" *ngIf="!isLoading">
-    <ng-container *ngIf="!partSubmitted">
+    <ng-container *ngIf="partSubmitted">
         <mat-card>
             <mat-card-title>Create Part</mat-card-title>
             <mat-card-content>
@@ -14,30 +14,37 @@
                             </ng-container>
                         </mat-select>
                         <ng-container *ngIf="drawingIdInput.touched">
-                            <mat-error *ngIf="drawingIdInput.errors?.['required']">Drawing selection is required</mat-error>
-                          </ng-container>
+                            <mat-error *ngIf="drawingIdInput.errors?.['required']">Drawing selection is
+                                required</mat-error>
+                        </ng-container>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Part name" name="part_name" ngModel required #partNameInput="ngModel">
+                        <input matInput type="text" placeholder="Part name" name="part_name" ngModel required
+                            #partNameInput="ngModel">
                         <ng-container *ngIf="partNameInput.touched">
                             <mat-error *ngIf="partNameInput.errors?.['required']">Part name is required</mat-error>
-                          </ng-container>
+                        </ng-container>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Part number" name="part_number" ngModel required #partNumberInput="ngModel">
+                        <input matInput type="text" placeholder="Part number" name="part_number" ngModel required
+                            #partNumberInput="ngModel">
                         <ng-container *ngIf="partNumberInput.touched">
-                            <mat-error *ngIf="partNumberInput.errors?.['required']">Drawing selection is required</mat-error>
-                          </ng-container>
+                            <mat-error *ngIf="partNumberInput.errors?.['required']">Drawing selection is
+                                required</mat-error>
+                        </ng-container>
                     </mat-form-field>
                     <mat-form-field>
-                        <input matInput type="text" placeholder="Index" name="part_index" ngModel required #partIndexInput="ngModel">
+                        <input matInput type="text" placeholder="Index" name="part_index" ngModel required
+                            #partIndexInput="ngModel">
                         <ng-container *ngIf="partIndexInput.touched">
-                            <mat-error *ngIf="partIndexInput.errors?.['required']">Drawing selection is required</mat-error>
-                          </ng-container>
+                            <mat-error *ngIf="partIndexInput.errors?.['required']">Drawing selection is
+                                required</mat-error>
+                        </ng-container>
                     </mat-form-field>
                     <mat-form-field class="example-form-field">
                         <mat-label>Choose revision date</mat-label>
-                        <input matInput [matDatepicker]="datepicker" name="revision_date" ngModel required #revisionDateInput="ngModel">
+                        <input matInput [matDatepicker]="datepicker" name="revision_date" ngModel required
+                            #revisionDateInput="ngModel">
                         <mat-hint>MM/DD/YYYY</mat-hint>
                         <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
                         <mat-datepicker #datepicker>
@@ -47,8 +54,9 @@
                             </mat-datepicker-actions>
                         </mat-datepicker>
                         <ng-container *ngIf="revisionDateInput.touched">
-                            <mat-error *ngIf="revisionDateInput.errors?.['required']">Drawing selection is required</mat-error>
-                          </ng-container>
+                            <mat-error *ngIf="revisionDateInput.errors?.['required']">Drawing selection is
+                                required</mat-error>
+                        </ng-container>
                     </mat-form-field>
                     <button mat-raised-button color="primary">Next</button>
                 </form>
@@ -57,37 +65,53 @@
         </mat-card>
     </ng-container>
 
-    <!-- Dimensions form  -->
-    <ng-container *ngIf="partSubmitted">
-        <mat-card>
+    <!-- Dynamic my Array-->
+    <ng-container *ngIf="!partSubmitted">
+
+        
+        <mat-error *ngIf="errorMessageForDim">{{errorMessageForDim}}</mat-error>
+        <form [formGroup]="dynamicFormGroup" (ngSubmit)="addDimensionsSubmitHandler()">
             <mat-card-title>SPC dimension/s</mat-card-title>
-            <mat-card-content>
-                <mat-error *ngIf="errorMessageForDim">{{errorMessage}}</mat-error>
-                <form [formGroup]="dynamicForm" (ngSubmit)="addDimensionsSubmitHandler()">
-                    <!-- Dynamic input fields -->
-                    <ng-container *ngFor="let field of dynamicFormFields">
-                        <div class="field-group">
-                            <mat-form-field appearance="fill">
-                                <mat-label>{{ field.name }}</mat-label>
-                                <input matInput [formControl]="field.control" [placeholder]="field.name" [formControlName]="field.label"/>
-                                <ng-container *ngIf="dynamicForm.get(field.label)?.touched">
-                                    <mat-error *ngIf="dynamicForm.get(field.label)?.errors?.['required']">{{field.name}} is required</mat-error>
-                                    <mat-error *ngIf="dynamicForm.get(field.label)?.errors?.['pattern']">{{field.name}} must be a number</mat-error>
-                                </ng-container>
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-                    <div class="buttons">
-                        <button mat-raised-button color="accent" type="button" (click)="createDynamicFormFields()">Add
-                            dimension</button>
-                        <button mat-raised-button color="warn" type="button" (click)="removeFieldsMultiple()">Remove
-                            dimension</button>
-                    </div>
-                    <button mat-raised-button color="primary" type="submit">Submit</button>
-                </form>
+            <!-- Dynamic input fields -->
+            <ng-container formArrayName="dimensions" *ngFor="let field of dimensions.controls; let i = index;">
+                <div class="field-group" [formGroupName]="i">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Dimension</mat-label>
+                        <input matInput placeholder="dimension" formControlName="dimension" />
+                        <mat-error *ngIf="field.get('dimension')?.errors?.['required']">Dimension is
+                            required</mat-error>
+                        <mat-error *ngIf="field.get('dimension')?.errors?.['pattern']">Dimension must
+                            be a number</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Upper limit</mat-label>
+                        <input matInput placeholder="UpperLimit" formControlName="upperLimit" />
+                        <mat-error *ngIf="field.get('upperLimit')?.errors?.['required']">Upper limit is
+                            required</mat-error>
+                        <mat-error *ngIf="field.get('upperLimit')?.errors?.['pattern']">Upper limit must
+                            be a number</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Lower limit</mat-label>
+                        <input matInput placeholder="Upper Limit" formControlName="lowerLimit" />
+                        <mat-error *ngIf="field.get('lowerLimit')?.errors?.['required']">Lower limit is
+                            required</mat-error>
+                        <mat-error *ngIf="field.get('lowerLimit')?.errors?.['pattern']">Lower limit must
+                            be a number</mat-error>
+                    </mat-form-field>
+                    <button mat-button class="icon" (click)="removeForm(i)"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg></button>
+                </div>
 
-            </mat-card-content>
-        </mat-card>
+            </ng-container>
+            <div class="buttons">
+                <button mat-raised-button color="accent" type="button" (click)="addNewForm()">Add</button>
+            </div>
+            <button mat-raised-button color="primary" type="submit">Submit</button>
+        </form>
     </ng-container>
-
 </div>
