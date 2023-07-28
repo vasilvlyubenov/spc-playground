@@ -1,7 +1,17 @@
 .container {
-    display: flex;
     justify-content: center;
     align-items: center;
     overflow: auto;
     min-height: 81vh;
+    width: 100%;
+  }
+
+  .mat-mdc-form-field + .mat-mdc-form-field {
+    margin-left: 8px;
+  }
+  span {
+    font-weight: 500;
+  }
+  a{
+    color: rgb(88, 88, 88);
   }

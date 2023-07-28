@@ -5,17 +5,18 @@ import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { authGuard } from 'src/app/guards/auth.guard';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { guestGuard } from 'src/app/guards/guest.guard';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [authGuard]
+    canActivate: [guestGuard]
   },
   {
     path: 'register',
     component: RegisterComponent,
-    canActivate: [authGuard]
+    canActivate: [guestGuard],
   },
   {
     path: 'profile',

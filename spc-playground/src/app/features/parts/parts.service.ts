@@ -58,7 +58,11 @@ export class PartsService {
       return data;
   }
 
-  createPart(part: IPart): Observable<any> {
+  createPart(part: any): Observable<any> {
     return defer(() => this.supabase.from('parts').insert(part));
+  }
+
+  getAllParts() {
+    return defer(() => this.supabase.from('parts').select(`*, drawings (*)`));
   }
 }

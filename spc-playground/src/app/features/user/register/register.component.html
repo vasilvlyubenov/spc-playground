@@ -12,26 +12,20 @@
         </mat-form-field>
         <mat-form-field>
           <input matInput type="email" placeholder="Email" name="email" ngModel required email #emailInput="ngModel">
-          <ng-container *ngIf="emailInput.touched">
             <mat-error *ngIf="emailInput.errors?.['required']">Email is required</mat-error>
             <mat-error *ngIf="emailInput.errors?.['email']">Email is invalid</mat-error>
-          </ng-container>
         </mat-form-field>
         <mat-form-field>
           <input matInput type="password" placeholder="Password" name="password" ngModel required minlength="6"
             #passwordInput="ngModel">
-            <ng-container *ngIf="passwordInput.touched">
               <mat-error *ngIf="passwordInput.errors?.['required']">Password is required</mat-error>
               <mat-error *ngIf="passwordInput.errors?.['minlength']">Password must be at least 6 symbols</mat-error>
-            </ng-container>
         </mat-form-field>
         <mat-form-field>
           <input matInput type="password" placeholder="Confirm Password" name="rePassword" ngModel required minlength="6"
             #rePassword="ngModel">
-            <ng-container *ngIf="rePassword.touched">
               <mat-error *ngIf="rePassword.errors?.['required']">Confirm password is required</mat-error>
               <mat-error *ngIf="passwordInput.value !== rePassword.value">Password doesn't match</mat-error>
-            </ng-container>
         </mat-form-field>
 
         <button mat-raised-button color="primary">Register</button>

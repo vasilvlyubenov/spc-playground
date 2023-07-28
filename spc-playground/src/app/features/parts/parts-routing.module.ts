@@ -4,6 +4,7 @@ import { DrawingComponent } from './drawing/drawing.component';
 import { authGuard } from 'src/app/guards/auth.guard';
 import { CreatePartComponent } from './create-part/create-part.component';
 import { PartComponent } from './part/part.component';
+import { BatchComponent } from './batch/batch.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,11 @@ const routes: Routes = [
     component: CreatePartComponent,
     canActivate: [authGuard],
   },
+  {
+    path: ':id/create-batch',
+    component: BatchComponent,
+    canActivate: [authGuard]
+  }
 ];
 
 @NgModule({

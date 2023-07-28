@@ -17,9 +17,12 @@ import { CreatePartComponent } from './create-part/create-part.component';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PartComponent } from './part/part.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
+import { BatchComponent } from './batch/batch.component';
 
 @NgModule({
-  declarations: [DrawingComponent, CreatePartComponent, PartComponent],
+  declarations: [DrawingComponent, CreatePartComponent, PartComponent, BatchComponent],
   imports: [
     CommonModule,
     PartsRoutingModule,
@@ -35,7 +38,9 @@ import { PartComponent } from './part/part.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
+    MatExpansionModule,
     ReactiveFormsModule,
+    MatDividerModule
   ],
 })
 export class PartsModule {}

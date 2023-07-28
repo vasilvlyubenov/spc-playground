@@ -1,3 +1,31 @@
-<div class="container">
-<p>part works!</p>
+<app-spinner *ngIf="isLoading" />
+<div class="container" *ngIf="!isLoading">
+    <mat-error *ngIf="error">{{error}}</mat-error>
+    <ng-container *ngIf="!error">
+        <mat-accordion *ngFor="let part of parts">
+            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <span>Part: {{part.part_name}} {{part.part_number}}-{{part.part_index}}</span>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Drawing: {{part?.drawings?.drawing_name}}
+                        {{part?.drawings?.drawing_number}}-{{part?.drawings?.drawing_revision}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" [routerLink]="[part.id, 'create-batch']">Create batch</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/lots">All lots</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [routerLink]="[part.id, '/details']">Part details</a>
+                    </li>
+                </ul>
+            </mat-expansion-panel>
+            <mat-divider></mat-divider>
+        </mat-accordion>
+    </ng-container>
 </div>

@@ -18,7 +18,7 @@ export class ChangePasswordComponent implements OnDestroy {
 
   submitChangePasswordHandler(form: NgForm): string | void {
     if (form.invalid) {
-      return (this.errorMessage = 'Please try again!');
+      return
     }
 
     const { newPassword, repNewPassword } = form.form.value;
