@@ -10,47 +10,74 @@ import { Subscription } from 'rxjs';
 import { PartsService } from '../parts.service';
 import { IDrawing } from 'src/app/interfaces/Drawing';
 import { IPart } from 'src/app/interfaces/Part';
-import { IDynamicFormFields } from 'src/app/interfaces/DynamicFormFields';
+import { UserService } from '../../user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-part',
   templateUrl: './create-part.component.html',
   styleUrls: ['./create-part.component.css'],
 })
+
+
 export class CreatePartComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   errorMessage: string = '';
   drawingSubscription!: Subscription;
+  partSubscription!: Subscription;
   drawings!: Array<IDrawing>;
   partSubmitted: boolean = false;
   errorMessageForDim: string = '';
   partObject!: IPart;
 
-  // My implementation
   dynamicFormGroup!: FormGroup;
   dynamicFormArray!: FormArray;
 
   constructor(
     private partsService: PartsService,
     private formBuilder: FormBuilder,
+    private userService: UserService,
+    private router: Router,
   ) {}
 
   //Handling the Part form and showing the dimension form
-  createPartSubmitHandler(form: NgForm): string | void {
+  async createPartSubmitHandler(form: NgForm): Promise<any> {
     if (form.invalid) {
       return;
     }
+    const userId = await this.userService.getSession()
     this.partObject = form.form.value;
+    this.partObject.creator_id = userId?.user.id;
     this.partSubmitted = true;
+    form.reset();
   }
 
   //Handling the Dimensions form and inserting the data to db
-  addDimensionsSubmitHandler() {
-    //TODO
+  addDimensionsSubmitHandler(formGroup: FormGroup) {
+    if (formGroup.invalid) {
+      return
+    }
+    const dimensionsJSON = formGroup.value.dimensions.length > 0 ? JSON.stringify(formGroup.value.dimensions) : null;
+    
+    this.partObject.spc_dimensions = dimensionsJSON;
+
+    this.partsService.createPart(this.partObject).subscribe({
+      next: ({data, error}) => {
+        if (error) {
+          this.errorMessageForDim = error.message;
+          throw error;
+        }
+
+        this.errorMessageForDim = '';
+        formGroup.reset();
+        this.router.navigate(['/']);
+      }
+    });
+    
   }
 
   get dimensions() {
-    return this.dynamicFormGroup.get('dimensions') as FormArray
+    return this.dynamicFormGroup.get('dimensions') as FormArray;
   }
 
   basicForm(): FormGroup {

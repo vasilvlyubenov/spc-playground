@@ -6,7 +6,7 @@
     <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item active">
-          <a class="nav-link" routerLink="/parts" (click)="isMenuCollapsed = true">Parts</a>
+          <a class="nav-link" routerLink="/" (click)="isMenuCollapsed = true">Parts</a>
         </li>
         <ng-container *ngIf="isLogged">
           <li class="nav-item">

@@ -1,6 +1,6 @@
 <app-spinner *ngIf="isLoading" />
 <div class="container" *ngIf="!isLoading">
-    <ng-container *ngIf="partSubmitted">
+    <ng-container *ngIf="!partSubmitted">
         <mat-card>
             <mat-card-title>Create Part</mat-card-title>
             <mat-card-content>
@@ -65,14 +65,14 @@
         </mat-card>
     </ng-container>
 
-    <!-- Dynamic my Array-->
-    <ng-container *ngIf="!partSubmitted">
-
-        
-        <mat-error *ngIf="errorMessageForDim">{{errorMessageForDim}}</mat-error>
-        <form [formGroup]="dynamicFormGroup" (ngSubmit)="addDimensionsSubmitHandler()">
+    <!-- Dynamic form-->
+    <ng-container *ngIf="partSubmitted">
+        <form [formGroup]="dynamicFormGroup" (ngSubmit)="addDimensionsSubmitHandler(dynamicFormGroup)">
+            <ng-container class="formHeader">
             <mat-card-title>SPC dimension/s</mat-card-title>
-            <!-- Dynamic input fields -->
+            <mat-error *ngIf="errorMessageForDim">{{errorMessageForDim}}</mat-error>
+        </ng-container>
+        <!-- Dynamic input fields -->
             <ng-container formArrayName="dimensions" *ngFor="let field of dimensions.controls; let i = index;">
                 <div class="field-group" [formGroupName]="i">
                     <mat-form-field appearance="fill">
@@ -99,19 +99,16 @@
                         <mat-error *ngIf="field.get('lowerLimit')?.errors?.['pattern']">Lower limit must
                             be a number</mat-error>
                     </mat-form-field>
-                    <button mat-button class="icon" (click)="removeForm(i)"><svg xmlns="http://www.w3.org/2000/svg"
-                            width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                            <path
-                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                        </svg></button>
+                    <button mat-mini-fab class="delete" color="warn" aria-label="Example icon button with a delete icon" type="button" (click)="removeForm(i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
                 </div>
 
             </ng-container>
             <div class="buttons">
                 <button mat-raised-button color="accent" type="button" (click)="addNewForm()">Add</button>
+                <button mat-raised-button color="primary" type="submit">Submit</button>
             </div>
-            <button mat-raised-button color="primary" type="submit">Submit</button>
         </form>
     </ng-container>
 </div>

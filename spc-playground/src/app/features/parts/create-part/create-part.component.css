@@ -5,7 +5,9 @@
   overflow: auto;
   min-height: 81vh;
 }
-  
+  form {
+    text-align: center;
+  }
   mat-card {
     max-width: 400px;
     width: 100%;
@@ -18,6 +20,7 @@
   
   mat-form-field {
     width: 100%;
+    margin: 1px;
   }
   
   /* button {
@@ -35,7 +38,10 @@
 .buttons {
   display: flex;
   flex-direction: row;
-  margin-bottom: 1rem;
+  justify-content: center;
+}
+.buttons button{
+margin: 1em;
 }
 
 .icon {
@@ -46,4 +52,13 @@
 .field-group {
   display: flex;
   align-items: flex-start;
+}
+
+.delete {
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.formHeader{
+  display: block;
 }

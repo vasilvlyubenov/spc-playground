@@ -16,9 +16,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { CreatePartComponent } from './create-part/create-part.component';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PartComponent } from './part/part.component';
 
 @NgModule({
-  declarations: [DrawingComponent, CreatePartComponent],
+  declarations: [DrawingComponent, CreatePartComponent, PartComponent],
   imports: [
     CommonModule,
     PartsRoutingModule,

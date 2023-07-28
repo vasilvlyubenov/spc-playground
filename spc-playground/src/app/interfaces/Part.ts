@@ -6,5 +6,5 @@ export interface IPart {
     control_dimensions: string | null,
     spc_dimensions: string | null;
     drawing_id: number,
-    creator_id: string
+    creator_id: string | undefined
 }
