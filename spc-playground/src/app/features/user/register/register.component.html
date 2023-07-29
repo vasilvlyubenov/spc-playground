@@ -16,16 +16,21 @@
             <mat-error *ngIf="emailInput.errors?.['email']">Email is invalid</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="password" placeholder="Password" name="password" ngModel required minlength="6"
+          <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Password" name="password" ngModel required minlength="6"
             #passwordInput="ngModel">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
               <mat-error *ngIf="passwordInput.errors?.['required']">Password is required</mat-error>
               <mat-error *ngIf="passwordInput.errors?.['minlength']">Password must be at least 6 symbols</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="password" placeholder="Confirm Password" name="rePassword" ngModel required minlength="6"
+          <input matInput [type]="hideRepassword ? 'password' : 'text'" placeholder="Confirm Password" name="rePassword" ngModel required
             #rePassword="ngModel">
+            <button mat-icon-button matSuffix (click)="hideRepassword = !hideRepassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideRepassword">
+              <mat-icon>{{hideRepassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
               <mat-error *ngIf="rePassword.errors?.['required']">Confirm password is required</mat-error>
-              <mat-error *ngIf="passwordInput.value !== rePassword.value">Password doesn't match</mat-error>
         </mat-form-field>
 
         <button mat-raised-button color="primary">Register</button>

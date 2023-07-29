@@ -15,10 +15,10 @@
                 </mat-expansion-panel-header>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" [routerLink]="[part.id, 'create-batch']">Create batch</a>
+                        <a class="nav-link" routerLink="/lots">All batches</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" routerLink="/lots">All lots</a>
+                        <a class="nav-link" [routerLink]="[part.id, 'create-batch']">Create batch</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" [routerLink]="[part.id, '/details']">Part details</a>

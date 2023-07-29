@@ -11,7 +11,10 @@
             <mat-error *ngIf="emailInput.errors?.['email']">Email is invalid</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="password" placeholder="Password" name="password" ngModel required minlength="6" #passwordInput="ngModel">
+          <input matInput [type]="hide ? 'password' : 'text'" placeholder="Password" name="password" ngModel required minlength="6" #passwordInput="ngModel">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
             <mat-error *ngIf="passwordInput.errors?.['minlength']">Password must be at least 6 symbols</mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary">Login</button>

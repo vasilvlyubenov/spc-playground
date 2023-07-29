@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnDestroy {
+  hidePassword: boolean = true;
+  hideRepassword: boolean = true;
   selectedFileName: string = '';
   errorMessage: string = '';
   regSubscription!: Subscription;
@@ -25,6 +27,10 @@ export class RegisterComponent implements OnDestroy {
     }
 
     const { avatar, email, password, rePassword } = form?.form.value;
+
+    if (password !== rePassword) {
+      return this.errorMessage = 'Password doesn\'t patch'
+    }
 
     if (avatar) {
       if (avatar.size > 5000000) {

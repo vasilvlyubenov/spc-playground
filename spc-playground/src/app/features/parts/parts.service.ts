@@ -58,11 +58,15 @@ export class PartsService {
       return data;
   }
 
-  createPart(part: any): Observable<any> {
+  createPart(part: Object): Observable<any> {
     return defer(() => this.supabase.from('parts').insert(part));
   }
 
   getAllParts() {
     return defer(() => this.supabase.from('parts').select(`*, drawings (*)`));
+  }
+
+  createBatch(data: Object) {
+    return defer(() => this.supabase.from('production-batches').insert(data));
   }
 }

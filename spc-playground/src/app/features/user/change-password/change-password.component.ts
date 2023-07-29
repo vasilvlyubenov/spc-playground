@@ -11,6 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./change-password.component.css'],
 })
 export class ChangePasswordComponent implements OnDestroy {
+  hidePassword: boolean = true;
+  hideRepassword: boolean = true;
   errorMessage: string = '';
   updatePassSubscription!: Subscription;
 

@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 
-
 import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
 import { CoreModule } from './core/core.module';
@@ -15,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserModule } from './features/user/user.module';
 import { PageNotFoundModule } from './page404/page-not-found.module';
 import { PartsModule } from './features/parts/parts.module';
+import { BatchModule } from './features/batch/batch.module';
 
 
 PlotlyModule.plotlyjs = PlotlyJS;
@@ -33,6 +33,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
     NgbModule,
     UserModule,
     PartsModule,
+    BatchModule,
     PageNotFoundModule,
     AppRoutingModule,
   ],

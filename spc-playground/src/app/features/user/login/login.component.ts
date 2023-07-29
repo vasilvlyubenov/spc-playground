@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnDestroy {
+  hide:boolean = true;
   errorMessage: string = '';
   logSubscription!: Subscription;
   sessionSub!: Subscription;

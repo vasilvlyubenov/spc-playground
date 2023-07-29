@@ -4,7 +4,7 @@ import { DrawingComponent } from './drawing/drawing.component';
 import { authGuard } from 'src/app/guards/auth.guard';
 import { CreatePartComponent } from './create-part/create-part.component';
 import { PartComponent } from './part/part.component';
-import { BatchComponent } from './batch/batch.component';
+import { BatchComponent } from '../batch/create-batch/batch.component';
 
 const routes: Routes = [
   {

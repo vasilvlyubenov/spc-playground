@@ -2,6 +2,7 @@
 <div class="container" *ngIf="!isLoading">
   <mat-card>
     <mat-card-title>Create batch</mat-card-title>
+    <mat-error *ngIf="error">{{error}}</mat-error>
     <mat-card-content>
       <form #form="ngForm" (ngSubmit)="createBatchSubmitHandler(form)">
         <mat-form-field>
@@ -12,13 +13,13 @@
         <mat-form-field>
             <input matInput type="text" placeholder="Approvel by" name="approved_by" ngModel required
               #approvedBy="ngModel">
-              <mat-error *ngIf="approvedBy.errors?.['required']">Batch number is required</mat-error>
+              <mat-error *ngIf="approvedBy.errors?.['required']">Approvel by is required</mat-error>
           </mat-form-field>
           <mat-form-field>
-            <input matInput type="number" placeholder="Number of cavities" name="number_of_cavities" pattern="([0-9]+)" ngModel required
-              #cavitiesInput="ngModel">
-                <mat-error *ngIf="cavitiesInput.errors?.['required']">Number of cavities is required</mat-error>
-                <mat-error *ngIf="cavitiesInput.errors?.['type']">Enter a number</mat-error>
+            <input matInput type="number" placeholder="Number of cavities" name="number_of_cavities" ngModel required
+              #cavitiesInput="ngModel" min="1">
+                <mat-error *ngIf="cavitiesInput.errors?.['required']">Please enter a number</mat-error>
+                <mat-error *ngIf="cavitiesInput.errors?.['min']">Number must be above 0</mat-error>
           </mat-form-field>
         <mat-form-field class="example-form-field">
           <mat-label>Date approved</mat-label>
@@ -33,7 +34,7 @@
           </mat-datepicker>
             <mat-error *ngIf="approvalDate.errors?.['required']">Revision date is required</mat-error>
         </mat-form-field>
-
+{{cavitiesInput.errors?.['pattern']}}
         <button mat-raised-button color="primary">Submit</button>
       </form>
     </mat-card-content>
