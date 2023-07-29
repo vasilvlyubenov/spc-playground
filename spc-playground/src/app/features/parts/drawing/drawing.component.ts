@@ -25,9 +25,9 @@ export class DrawingComponent implements OnDestroy {
     let file_url = '';
 
     if (form.invalid) {
-      return
+      return;
     }
-    
+
     const {
       drawing,
       drawing_name,
@@ -37,6 +37,12 @@ export class DrawingComponent implements OnDestroy {
     } = form.form.value;
     const user = await this.userService.getSession();
     const creator_id = user?.user.id;
+    const drawingNameArr = drawing.name.split('.');
+    const fileExtension = drawingNameArr[drawingNameArr.length - 1];
+
+    if (fileExtension !== 'pdf' || fileExtension !== 'tiff') {
+      return (this.errorMessage = 'File extension not supported!');
+    }
 
     if (!drawing) {
       return (this.errorMessage = "Please upload file: '.pdf, .tiff'");
@@ -61,21 +67,23 @@ export class DrawingComponent implements OnDestroy {
       }
     }
 
-    this.subscription = this.partsService.createDrawing({
-      drawing_name,
-      drawing_number,
-      drawing_revision,
-      revision_date,
-      creator_id,
-      file_url,
-    }).subscribe({
-      next: ({data, error}) => {
+    this.subscription = this.partsService
+      .createDrawing({
+        drawing_name,
+        drawing_number,
+        drawing_revision,
+        revision_date,
+        creator_id,
+        file_url,
+      })
+      .subscribe({
+        next: ({ data, error }) => {
           if (error) {
             this.errorMessage = error.message;
             throw error;
           }
-      }
-    });
+        },
+      });
 
     this.errorMessage = '';
     this.isLoading = false;
@@ -85,7 +93,7 @@ export class DrawingComponent implements OnDestroy {
   }
   ngOnDestroy(): void {
     if (this.subscription) {
-      this.subscription.unsubscribe()
+      this.subscription.unsubscribe();
     }
   }
 }

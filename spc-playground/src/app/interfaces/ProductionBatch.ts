@@ -7,6 +7,7 @@ export interface IProductionBatch {
     creator_id: string,
     created_at: string, 
     approval_date: Date,
-    end_date: Date | null,
+    closed_date: Date | null,
+    closed_by: string | null,
     number_of_cavities: number;
 }

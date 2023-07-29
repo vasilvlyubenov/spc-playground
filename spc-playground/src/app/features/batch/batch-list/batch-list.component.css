@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    min-height: 81vh;
+    width: 100%;
+  }
+  table {
+    width: 100%;
+  }
+
+  .btnLink {
+    text-decoration: none;
+    color: whitesmoke;
+  }
+
+  a {
+    text-decoration: none;
+    color: dimgray;
+  }
+
+  a:hover {
+    color: blue;
+  }

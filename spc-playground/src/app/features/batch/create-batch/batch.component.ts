@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { PartsService } from '../../parts/parts.service';
 import { UserService } from '../../user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BatchService } from '../batch.service';
 
 @Component({
   selector: 'app-batch',
@@ -17,7 +17,7 @@ export class BatchComponent implements OnDestroy, OnInit {
   partId: string = '';
 
   constructor(
-    private partService: PartsService,
+    private batchService: BatchService,
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router
@@ -32,7 +32,7 @@ export class BatchComponent implements OnDestroy, OnInit {
     const userSession = await this.userService.getSession();
     const userId = userSession?.user.id;
 
-    this.createBatchSubscription = this.partService
+    this.createBatchSubscription = this.batchService
       .createBatch({
         batch_number,
         approved_by,

@@ -1,0 +1,30 @@
+<app-spinner *ngIf="isLoading" />
+<div class="container" *ngIf="!isLoading">
+  <mat-card>
+    <mat-card-title>Close Batch</mat-card-title>
+    <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
+    <mat-card-content>
+      <form #form="ngForm" (ngSubmit)="closeBatchSubmitHandler(form)">
+        <mat-form-field>
+            <input matInput type="text" placeholder="Closed by" name="closed_by" ngModel required
+              #approvedBy="ngModel">
+              <mat-error *ngIf="approvedBy.errors?.['required']">Approvel by is required</mat-error>
+          </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Date closed</mat-label>
+          <input matInput [matDatepicker]="datepicker" name="closed_date" ngModel required #approvalDate="ngModel">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #datepicker>
+            <mat-datepicker-actions>
+              <button mat-button matDatepickerCancel>Cancel</button>
+              <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+            </mat-datepicker-actions>
+          </mat-datepicker>
+            <mat-error *ngIf="approvalDate.errors?.['required']">Revision date is required</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary">Submit</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

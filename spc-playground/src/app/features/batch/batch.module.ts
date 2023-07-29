@@ -9,10 +9,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { BatchListComponent } from './batch-list/batch-list.component';
+import { BatchRoutingModule } from './batch-routing.module';
+import { MatTableModule } from '@angular/material/table';
+import { CloseBatchComponent } from './close-batch/close-batch.component';
 
 
 @NgModule({
-  declarations: [BatchComponent],
+  declarations: [BatchComponent, BatchListComponent, CloseBatchComponent],
   imports: [
     CommonModule,
     MatButtonModule,
@@ -22,7 +26,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     MatIconModule,
     FormsModule,
     MatDatepickerModule,
-    SharedModule
+    SharedModule,
+    BatchRoutingModule,
+    MatTableModule
   ]
 })
 export class BatchModule { }
