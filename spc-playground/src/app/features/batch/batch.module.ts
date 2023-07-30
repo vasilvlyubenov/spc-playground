@@ -13,10 +13,11 @@ import { BatchListComponent } from './batch-list/batch-list.component';
 import { BatchRoutingModule } from './batch-routing.module';
 import { MatTableModule } from '@angular/material/table';
 import { CloseBatchComponent } from './close-batch/close-batch.component';
+import { AddMeasurementsComponent } from './add-measurements/add-measurements.component';
 
 
 @NgModule({
-  declarations: [BatchComponent, BatchListComponent, CloseBatchComponent],
+  declarations: [BatchComponent, BatchListComponent, CloseBatchComponent, AddMeasurementsComponent],
   imports: [
     CommonModule,
     MatButtonModule,

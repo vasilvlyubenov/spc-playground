@@ -1,7 +1,7 @@
 <app-spinner *ngIf="isLoading"></app-spinner>
 <div class="container" *ngIf="!isLoading">
     <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
-    <table mat-table [dataSource]="batchData" class="mat-elevation-z8">
+    <table mat-table [dataSource]="batchData" class="mat-elevation-z8" *ngIf="batchData.length > 0">
         <p>batch-list works!</p>
         <!--Bat number column-->
         <ng-container matColumnDef="Batch number">
@@ -15,42 +15,36 @@
             <td mat-cell *matCellDef="let element"> {{element.approval_date | date:"MM.dd.yyyy" }} </td>
         </ng-container>
 
-        <!--Approved by column-->
-        <ng-container matColumnDef="Approved by">
-            <th mat-header-cell *matHeaderCellDef> Approved by </th>
-            <td mat-cell *matCellDef="let element"> {{element.approved_by}} </td>
-        </ng-container>
-
         <!--Date closed column-->
         <ng-container matColumnDef="Date closed">
             <th mat-header-cell *matHeaderCellDef> Date closed </th>
-            <td mat-cell *matCellDef="let element"> {{ element.closed_date ? [element.closed_date | date:"MM.dd.yyyy"] :
+            <td mat-cell *matCellDef="let element" [ngClass]="element.closed_date ? '' : 'open'"> {{ element.closed_date ? [element.closed_date | date:"MM.dd.yyyy"] :
                 'OPEN' }} </td>
         </ng-container>
 
         <!--Measurements link column-->
         <ng-container matColumnDef="SPC measuremetns">
-            <th mat-header-cell *matHeaderCellDef> SPC measuremetns</th>
+            <th mat-header-cell *matHeaderCellDef> SPC measuremetns </th>
             <td mat-cell *matCellDef="let element"> <a  [replaceUrl]="true" [routerLink]="[element.id, 'add-measurements']" [ngStyle]="{pointerEvents: element.closed_date ? 'none' : ''}"> Add measuremetns
                 </a></td>
         </ng-container>
 
         <!--SPC cahrts link column-->
         <ng-container matColumnDef="SPC charts">
-            <th mat-header-cell *matHeaderCellDef> SPC charts</th>
+            <th mat-header-cell *matHeaderCellDef> SPC charts </th>
             <td mat-cell *matCellDef="let element"> <a  [replaceUrl]="true" [routerLink]="[element.id, 'spc-charts']"> Show charts </a></td>
         </ng-container>
 
         <!--Info link column-->
         <ng-container matColumnDef="Info">
-            <th mat-header-cell *matHeaderCellDef> Batch info</th>
+            <th mat-header-cell *matHeaderCellDef> Batch info </th>
             <td mat-cell *matCellDef="let element"> <a  [replaceUrl]="true" [routerLink]="[element.id, 'info']"> Show info </a></td>
         </ng-container>
 
         <!--Status column-->
         <ng-container matColumnDef="button">
             <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element"><a class="btnLink"  [replaceUrl]="true" [ngStyle]="{pointerEvents: element.closed_date ? 'none' : ''}" [routerLink]="[element.id, 'close_batch']"><button
+            <td mat-cell *matCellDef="let element"><a class="btnLink"   [ngStyle]="{pointerEvents: element.closed_date ? 'none' : ''}" [routerLink]="[element.id, 'close-batch']"><button
                         mat-raised-button [color]="!element.closed_date ? 'primary' : 'basic'"
                         [disabled]="element.closed_date ? true : false">{{!element.closed_date ? 'CLOSE' :
                         'Closed'}}</button></a></td>
@@ -59,4 +53,5 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <h2 *ngIf="batchData.length === 0">There are no batches created yet!</h2>
 </div>

@@ -56,7 +56,7 @@ export class BatchComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.partId = this.route.snapshot.params['id'];
+    this.partId = this.route.snapshot.params['partId'];
     console.log(this.partId);
   }
 

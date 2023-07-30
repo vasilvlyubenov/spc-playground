@@ -4,20 +4,36 @@ import { authGuard } from 'src/app/guards/auth.guard';
 import { BatchComponent } from './create-batch/batch.component';
 import { BatchListComponent } from './batch-list/batch-list.component';
 import { CloseBatchComponent } from './close-batch/close-batch.component';
+import { AddMeasurementsComponent } from './add-measurements/add-measurements.component';
 
 const routes: Routes = [
   {
-    path: ':id/batch-list',
+    path: 'batch-list',
     component: BatchListComponent,
   },
   {
-    path: ':id/create-batch',
+    path: 'create-batch',
     component: BatchComponent,
     canActivate: [authGuard]
   },
   {
-    path: ':id/batch-list/:id/close_batch',
+    path: 'batch-list/:batchId/close-batch',
     component: CloseBatchComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'batch-list/:batchId/add-measurements',
+    component: AddMeasurementsComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'batch-list/:batchId/spc-charts',
+    component: AddMeasurementsComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'batch-list/:batchId/info',
+    component: AddMeasurementsComponent,
     canActivate: [authGuard]
   }
 ];

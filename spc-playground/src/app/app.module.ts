@@ -14,7 +14,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserModule } from './features/user/user.module';
 import { PageNotFoundModule } from './page404/page-not-found.module';
 import { PartsModule } from './features/parts/parts.module';
-import { BatchModule } from './features/batch/batch.module';
 
 
 PlotlyModule.plotlyjs = PlotlyJS;
@@ -33,7 +32,6 @@ PlotlyModule.plotlyjs = PlotlyJS;
     NgbModule,
     UserModule,
     PartsModule,
-    BatchModule,
     PageNotFoundModule,
     AppRoutingModule,
   ],

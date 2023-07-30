@@ -1,25 +1,38 @@
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
-    min-height: 81vh;
-    width: 100%;
-  }
-  table {
-    width: 100%;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  min-height: 81vh;
+  width: 100%;
+}
+table {
+  width: 100%;
+}
 
-  .btnLink {
-    text-decoration: none;
-    color: whitesmoke;
-  }
+.btnLink {
+  text-decoration: none;
+  color: whitesmoke;
+}
 
-  a {
-    text-decoration: none;
-    color: dimgray;
-  }
+a {
+  text-decoration: none;
+  color: dimgray;
+}
 
-  a:hover {
-    color: blue;
+a:hover {
+  color: blue;
+}
+
+.open {
+  color: rgb(5, 205, 5);
+  font-weight: 500;
+  animation: fadeIn 1s infinite alternate;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
+}

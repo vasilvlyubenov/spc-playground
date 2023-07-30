@@ -39,7 +39,7 @@ export class CloseBatchComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-      this.batchId = this.route.snapshot.params['id'];   
+      this.batchId = this.route.snapshot.params['batchId'];   
       this.partId = this.route.snapshot.url['0'].path;
          
   }
