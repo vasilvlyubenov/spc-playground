@@ -25,7 +25,7 @@ export class BatchService {
   }
 
   getAllPartBatches(partId: string): Observable<PostgrestSingleResponse<any>> {
-    return defer(()=> this.supabase.from('production-batches').select().eq('part_id', partId));
+    return defer(()=> this.supabase.from('production-batches').select().eq('part_id', partId).order('approval_date', {ascending: false}));
   }
 
   getBatchById(batchId: string): Observable<PostgrestSingleResponse<any>> {
@@ -38,5 +38,9 @@ export class BatchService {
 
   insertSpcDimensions(batchId: string, measurements: string): Observable<PostgrestSingleResponse<any>>  {
     return defer(() => this.supabase.from('production-batches').update({spc_dimension_results: measurements}).eq('id', batchId));
+  }
+
+  getBatchForSpc(batchId: string): Observable<PostgrestSingleResponse<any>> {
+    return defer(() => this.supabase.from('production-batches').select(`*, parts (*)`).eq('id', batchId).order('approval_date', {ascending: false}));
   }
 }

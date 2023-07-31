@@ -5,8 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 
-import * as PlotlyJS from 'plotly.js-dist-min';
-import { PlotlyModule } from 'angular-plotly.js';
+
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,7 +15,6 @@ import { PageNotFoundModule } from './page404/page-not-found.module';
 import { PartsModule } from './features/parts/parts.module';
 
 
-PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
   declarations: [
@@ -26,7 +24,6 @@ PlotlyModule.plotlyjs = PlotlyJS;
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    PlotlyModule,
     CoreModule,
     SharedModule,
     NgbModule,

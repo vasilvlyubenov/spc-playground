@@ -5,6 +5,7 @@ import { BatchComponent } from './create-batch/batch.component';
 import { BatchListComponent } from './batch-list/batch-list.component';
 import { CloseBatchComponent } from './close-batch/close-batch.component';
 import { AddMeasurementsComponent } from './add-measurements/add-measurements.component';
+import { SpcChartsComponent } from './spc-charts/spc-charts.component';
 
 const routes: Routes = [
   {
@@ -28,14 +29,12 @@ const routes: Routes = [
   },
   {
     path: 'batch-list/:batchId/spc-charts',
-    component: AddMeasurementsComponent,
-    canActivate: [authGuard]
+    component: SpcChartsComponent,
   },
   {
     path: 'batch-list/:batchId/info',
-    component: AddMeasurementsComponent,
-    canActivate: [authGuard]
-  }
+    component: BatchListComponent,
+  },
 ];
 
 @NgModule({

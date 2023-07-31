@@ -55,18 +55,20 @@ export class AddMeasurementsComponent implements OnInit, OnDestroy {
       thirdMeasurement,
       fourthMeasurement,
       fifthMeasurement,
-      measurementDate,
     };
+
     const inArray = dimensionArr.find((x) => x.dimensionId === dimensionId);
     interface IObj {
       dimensionId: string;
       results: Array<Object>;
+      measurementDate: Date;
     }
 
     if (!inArray) {
       const obj: IObj = {
         dimensionId,
         results: [results],
+        measurementDate,
       };
 
       dimensionArr.push(obj);

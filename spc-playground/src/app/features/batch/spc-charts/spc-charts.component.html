@@ -1,0 +1,6 @@
+<app-spinner *ngIf="isLoading" />
+<div class="container" *ngIf="!isLoading">
+    <ng-container *ngFor="let graph of graphArray">
+        <plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot>
+    </ng-container>
+</div>
