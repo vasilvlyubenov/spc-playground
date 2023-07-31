@@ -59,6 +59,7 @@ export class SpcChartsComponent implements OnInit, OnDestroy {
         next: ({ data, error }) => {
           if (error) {
             this.router.navigate([`${this.partId}/batch-list`]);
+            this.isLoading = false;
             alert(error.message);
             throw error;
           }
@@ -68,6 +69,11 @@ export class SpcChartsComponent implements OnInit, OnDestroy {
             data[0].spc_dimension_results
           );
 
+            if (parsedMeasurementsData === null) {
+              this.isLoading = false;
+              throw Error('Missing data');
+            }
+            
           parsedMeasurementsData.sort(function (a: IPartSpc, b: IPartSpc) {
             return (
               new Date(a.measurementDate).getTime() -
@@ -246,6 +252,7 @@ export class SpcChartsComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.log('Error fetching data:', err);
+          this.isLoading = false;
           throw err;
         },
       });

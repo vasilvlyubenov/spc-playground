@@ -6,3 +6,9 @@
     overflow: auto;
     min-height: 81vh;
   }
+
+
+  .header {
+    display: flex;
+   justify-content: center; 
+   }
