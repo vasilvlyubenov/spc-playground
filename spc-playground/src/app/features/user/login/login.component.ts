@@ -30,6 +30,7 @@ export class LoginComponent implements OnDestroy {
       next: ({ data, error }) => {
         if (error) {
           this.router.navigate(['/login']);
+          this.isLoading = false;
           this.errorMessage = error.message;
           throw error;
         }

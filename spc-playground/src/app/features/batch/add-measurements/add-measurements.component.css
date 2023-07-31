@@ -1,0 +1,39 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    min-height: 81vh;
+    width: 100%;
+  }
+
+  form {
+    text-align: center;
+  }
+  mat-card {
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  mat-card-title {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+  
+  mat-form-field {
+    width: 100%;
+    margin: 1px;
+  }
+  
+  /* button {
+    width: 100%;
+  } */
+  
+.imageField {
+  height: 78px;
+}
+
+.snak {
+  margin-right: 12px;
+}

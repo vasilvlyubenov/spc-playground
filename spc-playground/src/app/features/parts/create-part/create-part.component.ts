@@ -12,14 +12,13 @@ import { IDrawing } from 'src/app/interfaces/Drawing';
 import { IPart } from 'src/app/interfaces/Part';
 import { UserService } from '../../user/user.service';
 import { Router } from '@angular/router';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-create-part',
   templateUrl: './create-part.component.html',
   styleUrls: ['./create-part.component.css'],
 })
-
-
 export class CreatePartComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   errorMessage: string = '';
@@ -37,7 +36,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     private partsService: PartsService,
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private router: Router,
+    private router: Router
   ) {}
 
   //Handling the Part form and showing the dimension form
@@ -45,7 +44,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     if (form.invalid) {
       return;
     }
-    const userId = await this.userService.getSession()
+    const userId = await this.userService.getSession();
     this.partObject = form.form.value;
     this.partObject.creator_id = userId?.user.id;
     this.partSubmitted = true;
@@ -55,25 +54,28 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   //Handling the Dimensions form and inserting the data to db
   addDimensionsSubmitHandler(formGroup: FormGroup) {
     if (formGroup.invalid) {
-      return
+      return;
     }
-    const dimensionsJSON = formGroup.value.dimensions.length > 0 ? JSON.stringify(formGroup.value.dimensions) : null;
-    
+    const dimensionsJSON =
+      formGroup.value.dimensions.length > 0
+        ? JSON.stringify(formGroup.value.dimensions)
+        : null;
+
     this.partObject.spc_dimensions = dimensionsJSON;
 
     this.partsService.createPart(this.partObject).subscribe({
-      next: ({data, error}) => {
+      next: ({ data, error }) => {
         if (error) {
           this.errorMessageForDim = error.message;
+          this.isLoading = false;
           throw error;
         }
 
         this.errorMessageForDim = '';
         formGroup.reset();
         this.router.navigate(['/']);
-      }
+      },
     });
-    
   }
 
   get dimensions() {
@@ -81,22 +83,23 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   }
 
   basicForm(): FormGroup {
+    const dimensionId = uuidv4();
     return this.formBuilder.group({
-      dimension: ['', [
-        Validators.required,
-        Validators.pattern('^\\d*\\.?\\d+$'),
-      ]],
-      upperLimit: ['', [
-        Validators.required,
-        Validators.pattern('^\\d*\\.?\\d+$'),
-      ]],
-      lowerLimit: ['', [
-        Validators.required,
-        Validators.pattern('^\\d*\\.?\\d+$'),
-      ]],
+      id: dimensionId,
+      dimension: [
+        '',
+        [Validators.required, Validators.pattern('^\\d*\\.?\\d+$')],
+      ],
+      upperLimit: [
+        '',
+        [Validators.required, Validators.pattern('^\\d*\\.?\\d+$')],
+      ],
+      lowerLimit: [
+        '',
+        [Validators.required, Validators.pattern('^\\d*\\.?\\d+$')],
+      ],
     });
   }
-
 
   addNewForm(): void {
     this.dimensions.push(this.basicForm());
@@ -107,11 +110,13 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
+
     this.drawingSubscription = this.partsService.getAllDrawings().subscribe({
       next: ({ data, error }) => {
-        this.isLoading = true;
         if (error) {
           this.errorMessage = error.message;
+          this.isLoading = false;
           throw error;
         }
         this.drawings = data;
@@ -122,12 +127,11 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     });
 
     this.dynamicFormGroup = this.formBuilder.group({
-      dimensions: this.formBuilder.array([])
+      dimensions: this.formBuilder.array([]),
     });
   }
 
   ngOnDestroy(): void {
     this.drawingSubscription.unsubscribe();
   }
-
 }

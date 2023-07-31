@@ -14,6 +14,11 @@ import { BatchRoutingModule } from './batch-routing.module';
 import { MatTableModule } from '@angular/material/table';
 import { CloseBatchComponent } from './close-batch/close-batch.component';
 import { AddMeasurementsComponent } from './add-measurements/add-measurements.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+
 
 
 @NgModule({
@@ -29,7 +34,11 @@ import { AddMeasurementsComponent } from './add-measurements/add-measurements.co
     MatDatepickerModule,
     SharedModule,
     BatchRoutingModule,
-    MatTableModule
+    MatTableModule,
+    ReactiveFormsModule,
+    MatSnackBarModule,
+    MatNativeDateModule,
+    MatSelectModule
   ]
 })
 export class BatchModule { }

@@ -28,6 +28,7 @@ export class BatchComponent implements OnDestroy, OnInit {
       return;
     }
 
+    this.isLoading = true;
     const { batch_number, approved_by, number_of_cavities, approval_date } = form.form.value;
     const userSession = await this.userService.getSession();
     const userId = userSession?.user.id;
@@ -49,6 +50,8 @@ export class BatchComponent implements OnDestroy, OnInit {
             } else {
               this.error = error.message;
             }
+            this.isLoading = false;
+            throw error;
           }
           this.router.navigate(['/']);
         },
@@ -57,7 +60,6 @@ export class BatchComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.partId = this.route.snapshot.params['partId'];
-    console.log(this.partId);
   }
 
   ngOnDestroy(): void {

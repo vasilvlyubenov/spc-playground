@@ -65,4 +65,8 @@ export class PartsService {
     return defer(() => this.supabase.from('parts').select(`*, drawings (*)`));
   }
 
+  getPartById(partId: string) {
+    return defer(() => this.supabase.from('parts').select().eq('id', partId));
+  }
+
 }

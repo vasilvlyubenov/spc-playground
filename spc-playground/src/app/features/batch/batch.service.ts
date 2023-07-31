@@ -28,7 +28,15 @@ export class BatchService {
     return defer(()=> this.supabase.from('production-batches').select().eq('part_id', partId));
   }
 
+  getBatchById(batchId: string): Observable<PostgrestSingleResponse<any>> {
+    return defer(() => this.supabase.from('production-batches').select().eq('id', batchId));
+  }
+
   closeBatch(batchId:string, closedBy: string, closedDate: Date): Observable<PostgrestSingleResponse<any>> {
     return defer(() => this.supabase.from('production-batches').update({ closed_by: closedBy, closed_date: closedDate}).eq('id', batchId));
+  }
+
+  insertSpcDimensions(batchId: string, measurements: string): Observable<PostgrestSingleResponse<any>>  {
+    return defer(() => this.supabase.from('production-batches').update({spc_dimension_results: measurements}).eq('id', batchId));
   }
 }

@@ -24,15 +24,15 @@ export class CloseBatchComponent implements OnInit, OnDestroy{
       }
 
       const { closed_by, closed_date } = form.form.value;
-
+      this.isLoading = true;
       this.batchService.closeBatch(this.batchId, closed_by, closed_date ).subscribe({
         next: ({data, error}) => {
           if (error) {
             this.errorMessage = error.message;
+            this.isLoading = false;
             throw error;
           }
-
-          this.isLoading = true;
+          
           this.router.navigate([`${this.partId}/batch-list`]);
         }
       });
@@ -40,7 +40,7 @@ export class CloseBatchComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
       this.batchId = this.route.snapshot.params['batchId'];   
-      this.partId = this.route.snapshot.url['0'].path;
+      this.partId = this.route.snapshot.params['partId'];
          
   }
 

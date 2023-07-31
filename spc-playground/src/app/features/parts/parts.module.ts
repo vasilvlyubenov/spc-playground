@@ -19,9 +19,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PartComponent } from './part/part.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
+import { PartDetailsComponent } from './part-details/part-details.component';
 
 @NgModule({
-  declarations: [DrawingComponent, CreatePartComponent, PartComponent],
+  declarations: [DrawingComponent, CreatePartComponent, PartComponent, PartDetailsComponent],
   imports: [
     CommonModule,
     PartsRoutingModule,

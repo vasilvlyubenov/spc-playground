@@ -45,6 +45,7 @@ export class RegisterComponent implements OnDestroy {
         if (error) {
           this.router.navigate(['/register']);
           this.errorMessage = error.message;
+          this.isLoading = false;
           throw error;
         }
         if (avatar) {

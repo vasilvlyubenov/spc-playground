@@ -4,6 +4,7 @@ import { DrawingComponent } from './drawing/drawing.component';
 import { authGuard } from 'src/app/guards/auth.guard';
 import { CreatePartComponent } from './create-part/create-part.component';
 import { PartComponent } from './part/part.component';
+import { PartDetailsComponent } from './part-details/part-details.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,10 @@ const routes: Routes = [
     component: CreatePartComponent,
     canActivate: [authGuard],
   },
+  {
+    path: ':partId/details',
+    component: PartDetailsComponent
+  }
 ];
 
 @NgModule({
