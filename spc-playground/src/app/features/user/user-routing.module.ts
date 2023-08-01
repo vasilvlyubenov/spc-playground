@@ -6,6 +6,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { authGuard } from 'src/app/guards/auth.guard';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { guestGuard } from 'src/app/guards/guest.guard';
+import { profileGuard } from 'src/app/guards/profile.guard';
 
 const routes: Routes = [
   {
@@ -19,9 +20,9 @@ const routes: Routes = [
     canActivate: [guestGuard],
   },
   {
-    path: 'profile',
+    path: ':userId/profile',
     component: ProfileComponent,
-    canActivate: [authGuard]
+    canActivate: [profileGuard]
   },
   {
     path: 'change-password',

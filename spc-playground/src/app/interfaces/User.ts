@@ -3,6 +3,6 @@ export interface IUserInfo {
     user_id: string,
     first_name: string,
     last_name: string,
-    avatar_id:string,
+    avatar_path:string,
     created_at: string;
 }

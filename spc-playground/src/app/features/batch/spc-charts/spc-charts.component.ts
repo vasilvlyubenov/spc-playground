@@ -30,6 +30,7 @@ export class SpcChartsComponent implements OnInit, OnDestroy {
   partId: string = '';
   graphArray: Array<any>;
 
+  // Chart formula logic needs to be changed current one is for the sake of the project to work!
   constructor(
     private batchService: BatchService,
     private route: ActivatedRoute,

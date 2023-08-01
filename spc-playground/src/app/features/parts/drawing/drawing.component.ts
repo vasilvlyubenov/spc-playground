@@ -40,19 +40,23 @@ export class DrawingComponent implements OnDestroy {
     const drawingNameArr = drawing.name.split('.');
     const fileExtension = drawingNameArr[drawingNameArr.length - 1];
 
+    this.isLoading = true;
+
     if (fileExtension !== 'pdf' || fileExtension !== 'tiff') {
+      this.isLoading = false;
       return (this.errorMessage = 'File extension not supported!');
     }
 
     if (!drawing) {
+      this.isLoading = false;
       return (this.errorMessage = "Please upload file: '.pdf, .tiff'");
     }
 
     if (drawing.size > 10000000) {
+      this.isLoading = false;
       return (this.errorMessage = 'File is too big!');
     }
 
-    this.isLoading = true;
 
     try {
       const uploadResult = await this.partsService.uploadDrawingFile(

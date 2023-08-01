@@ -5,6 +5,7 @@ import {
   createClient,
   UserResponse,
   AuthResponse,
+  PostgrestSingleResponse,
 } from '@supabase/supabase-js';
 import { BehaviorSubject, Observable, Subscription, defer, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -22,7 +23,7 @@ export class UserService implements OnDestroy {
   private supabase: SupabaseClient;
   user!: UserResponse | undefined;
 
-  async getSession(): Promise<AuthSession | null> {
+  async getSession(): Promise<any> {
     const { data, error } = await this.supabase.auth.getSession();
     if (error) {
       throw error;
@@ -106,6 +107,31 @@ export class UserService implements OnDestroy {
     return data;
   }
 
+  async getUserAvatar(avatarPath: string) {
+    const {data, error} = await this.supabase.storage.from('public').download(avatarPath);
+
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+
+    return data;
+  }
+
+  async updateUserAvatar(avatarPath: string, avatarFile: File): Promise<any> {
+    const {data, error} = await this.supabase.storage.from('public').update(avatarPath, avatarFile, {
+      cacheControl: '3600',
+      upsert: true
+    })
+
+    if (error) {
+        console.error(error);
+        throw error;
+    }
+
+    return data;
+  }
+
   async uploadDrawing(fileName: string, avatarFile: File): Promise<any> {
     const generatedName = Date.now().toString();
     const nameToArray = fileName.split('.');
@@ -114,7 +140,7 @@ export class UserService implements OnDestroy {
     }`;
     const { data, error } = await this.supabase.storage
       .from('public')
-      .upload(`avatars/${newFileName}`, avatarFile);
+      .upload(`drawings/${newFileName}`, avatarFile);
 
     if (error) {
       console.error(error);
@@ -122,6 +148,18 @@ export class UserService implements OnDestroy {
     }
 
     return data;
+  }
+
+  getUserInfo(userId: string | undefined): Observable<PostgrestSingleResponse<any>> {
+    return defer(() => this.supabase.from('userInfo').select().eq('user_id', userId)) ;
+  }
+
+  createUserInfo(userData: Object): Observable<PostgrestSingleResponse<any>> {
+    return defer(() => this.supabase.from('userInfo').insert(userData));
+  }
+
+  updateUserInfo(userData: Object, userId: string | undefined): Observable<PostgrestSingleResponse<any>> {
+    return defer(() => this.supabase.from('userInfo').update(userData).eq('id', userId));
   }
 
   ngOnDestroy(): void {

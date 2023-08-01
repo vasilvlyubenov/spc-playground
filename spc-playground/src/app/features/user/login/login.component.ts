@@ -36,7 +36,6 @@ export class LoginComponent implements OnDestroy {
         }
         
         form.reset();
-        this.userService.getSession();
 
         this.errorMessage = '';
         this.router.navigate(['/']);

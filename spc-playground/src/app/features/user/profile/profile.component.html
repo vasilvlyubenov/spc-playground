@@ -1,3 +1,25 @@
-<div class="container">
-    <p>profile works!</p>
+<app-spinner *ngIf="isLoading" />
+<div class="container" *ngIf="!isLoading">
+  <mat-card>
+    <mat-card-title>Register</mat-card-title>
+    <mat-card-content>
+      <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
+      <form #form="ngForm" (ngSubmit)="updateProfile(form)">
+        <mat-form-field class="imageField">
+          <ngx-mat-file-input accept=".png, .jpg, .jpeg" type="file" placeholder="Upload avatar..." name="avatar"
+          color="primary" ngModel>
+        </ngx-mat-file-input>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" placeholder="First name" name="first_name" ngModel required #firstName="ngModel">
+            <mat-error *ngIf="firstName.errors?.['required']">First name required</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" placeholder="Last name" name="last_name" ngModel required #lastName="ngModel">
+              <mat-error *ngIf="lastName.errors?.['required']">Last name is required</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary">Register</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>
