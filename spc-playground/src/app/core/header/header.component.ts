@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Session } from '@supabase/supabase-js';
+import { Session, User, UserResponse } from '@supabase/supabase-js';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/features/user/user.service';
 
@@ -14,12 +14,16 @@ export class HeaderComponent implements OnDestroy, OnInit {
   logoutSubscription: Subscription | undefined;
   sessionSubscription: Subscription | undefined;
   session!: Object | null;
-  user!: Session | null;
+  _user!: UserResponse | undefined;
 
   constructor(private userService: UserService, private router: Router) { }
 
   get isLogged(): boolean {
     return !!this.userService.isLogged;
+  }
+
+  get user() {
+    return this._user = this.userService.userData;
   }
 
   logout(): void {
@@ -39,9 +43,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-      const userSession = await this.userService.getSession();
-      this.user = userSession;
-      
+    this.userService.getSession();
   }
 
   ngOnDestroy(): void {

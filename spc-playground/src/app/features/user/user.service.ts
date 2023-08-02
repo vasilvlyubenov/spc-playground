@@ -1,7 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   SupabaseClient,
-  AuthSession,
   createClient,
   UserResponse,
   AuthResponse,
@@ -33,6 +32,10 @@ export class UserService implements OnDestroy {
 
   get isLogged(): Object | null {
     return !!this.user;
+  }
+
+  get userData(): UserResponse | undefined {
+    return this.user;
   }
 
   constructor() {
@@ -159,7 +162,7 @@ export class UserService implements OnDestroy {
   }
 
   updateUserInfo(userData: Object, userId: string | undefined): Observable<PostgrestSingleResponse<any>> {
-    return defer(() => this.supabase.from('userInfo').update(userData).eq('id', userId));
+    return defer(() => this.supabase.from('userInfo').update(userData).eq('user_id', userId));
   }
 
   ngOnDestroy(): void {

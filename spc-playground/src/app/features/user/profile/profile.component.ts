@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IUserInfo } from 'src/app/interfaces/User';
 import { UserService } from '../user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 
@@ -21,13 +21,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   async updateProfile(form: NgForm): Promise<void | string> {
     if (form.invalid) {
       return;
     }
+    
     debugger
     const { avatar, first_name, last_name } = form?.form.value;
     let avatar_path = '';
@@ -36,14 +38,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     if (avatar) {
       let fileInfo = undefined;
-      const avatarNameArr = avatar.name.split('.');
-      const fileExtension = avatarNameArr[avatarNameArr.length - 1];
-      console.log(fileExtension);
-      console.log(fileExtension !== 'jpeg');
-      
-      if (fileExtension.match(/\.(jpg|jpeg|png)$/i)) {
+
+      if (avatar.type !== 'image/jpeg' && avatar.type !== 'image/png') {
         this.isLoading = false;
-        return (this.errorMessage = 'File extension not supported!');
+        return this.errorMessage = 'File type not supported'!
       }
 
       if (avatar.size > 5000000) {
@@ -52,7 +50,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
 
       try {
-        if (this.avatar) {
+        if (!!this.avatar) {
           fileInfo = await this.userService.updateUserAvatar(
             this.user.avatar_path,
             avatar
@@ -68,10 +66,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
       avatar_path = fileInfo.path;
     }
+    
+    let obj = {};
 
-    if (!this.user) {
+    if (this.avatar) {
+      obj = { avatar_path, user_id: this.userId, first_name, last_name }
+    } else {
+      obj = { user_id: this.userId, first_name, last_name }
+    }
+
+    if (!!this.user) {
       this.updateProfileSub = this.userService
-      .updateUserInfo({ avatar_path, user_id: this.userId, first_name, last_name }, this.userId)
+      .updateUserInfo(obj, this.userId)
       .subscribe({
         next: ({ data, error }) => {
           if (error) {
@@ -82,6 +88,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
           form.reset();
           this.errorMessage = '';
+          this.router.navigate([`${this.userId}/profile`]);
           this.isLoading = false;
         },
         error: (err) => {
@@ -90,7 +97,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       });
     } else {
       this.updateProfileSub = this.userService
-      .createUserInfo({ avatar_path, user_id: this.userId, first_name, last_name })
+      .createUserInfo(obj)
       .subscribe({
         next: ({ data, error }) => {
           if (error) {
@@ -101,6 +108,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
           form.reset();
           this.errorMessage = '';
+          this.router.navigate([`${this.userId}/profile`]);
           this.isLoading = false;
         },
         error: (err) => {
@@ -112,7 +120,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.userId = this.route.snapshot.params['userId'];
-    console.log(this.userId);
     this.userSub = this.userService.getUserInfo(this.userId).subscribe({
       next: ({ data, error }) => {
         if (error) {
@@ -120,14 +127,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
           throw error;
         }
         if (data) {
-          this.user = data;
+          this.user = data[0];
+          
         }
       },
     });
-
-    if (this.user) {
-      this.avatar = await this.userService.getUserAvatar(this.user.avatar_path);
-    }
   }
 
   ngOnDestroy(): void {

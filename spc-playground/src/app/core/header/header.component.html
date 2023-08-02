@@ -21,7 +21,7 @@
               <img class="user-img" src="../../../assets/user.png" />
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" [routerLink]="[user?.user?.id, 'profile']" (click)="isMenuCollapsed = true">Profile</a>
+              <a class="dropdown-item" [routerLink]="[user?.data?.user?.id, 'profile']" (click)="isMenuCollapsed = true">Profile</a>
               <a class="dropdown-item" routerLink="/change-password" (click)="isMenuCollapsed = true">Change password</a>
               <a class="dropdown-item" routerLink="/logout" (click)="logout()">Logout</a>
             </div>
