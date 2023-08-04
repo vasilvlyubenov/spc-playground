@@ -2,6 +2,7 @@
 <div class="container" *ngIf="!isLoading">
   <mat-card>
     <mat-card-title>User Profile</mat-card-title>
+    <img [src]="avatarUrl ? avatarUrl : '../../../assets/user.png'">
     <mat-card-content>
       <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
       <form #form="ngForm" (ngSubmit)="updateProfile(form)">
@@ -11,11 +12,11 @@
         </ngx-mat-file-input>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="text" placeholder="First name" name="first_name" [ngModel]="user.first_name" required #firstName="ngModel">
+          <input matInput type="text" placeholder="First name" name="first_name" [ngModel]="user.first_name ? user.first_name :''" required #firstName="ngModel">
             <mat-error *ngIf="firstName.errors?.['required']">First name required</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="text" placeholder="Last name" name="last_name" [ngModel]="user.last_name" required #lastName="ngModel">
+          <input matInput type="text" placeholder="Last name" name="last_name" [ngModel]="user.last_name ? user.last_name : ''" required #lastName="ngModel">
               <mat-error *ngIf="lastName.errors?.['required']">Last name is required</mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary">Submit changes</button>

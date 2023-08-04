@@ -5,9 +5,9 @@ import { inject } from '@angular/core';
 export const guestGuard: CanActivateFn = async (route, state) => {
   const userService = inject(UserService);
   const router = inject(Router);
-  const userSession = await userService.getSession();
+  const isLogged = userService.isLogged;
 
-  if (!userSession) {
+  if (!isLogged) {
     return true;
   }
 

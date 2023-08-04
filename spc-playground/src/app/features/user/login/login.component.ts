@@ -1,6 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
-import { FormControl, FormGroup, NgForm } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnDestroy, OnInit {
   hide:boolean = true;
   errorMessage: string = '';
   logSubscription!: Subscription;
@@ -45,6 +45,11 @@ export class LoginComponent implements OnDestroy {
       },
     });
   }
+
+  ngOnInit(): void {
+      this.userService.userData
+  }
+  
 
   ngOnDestroy(): void {
     if (this.logSubscription) {

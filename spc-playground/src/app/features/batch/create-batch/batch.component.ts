@@ -30,8 +30,7 @@ export class BatchComponent implements OnDestroy, OnInit {
 
     this.isLoading = true;
     const { batch_number, approved_by, number_of_cavities, approval_date } = form.form.value;
-    const userSession = await this.userService.getSession();
-    const userId = userSession?.user.id;
+    const userId = this.route.snapshot.params['userId'];
 
     this.createBatchSubscription = this.batchService
       .createBatch({

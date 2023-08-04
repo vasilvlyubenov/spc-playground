@@ -5,6 +5,7 @@ import {
   UserResponse,
   AuthResponse,
   PostgrestSingleResponse,
+  Session,
 } from '@supabase/supabase-js';
 import { BehaviorSubject, Observable, Subscription, defer, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -22,16 +23,13 @@ export class UserService implements OnDestroy {
   private supabase: SupabaseClient;
   user!: UserResponse | undefined;
 
-  async getSession(): Promise<any> {
-    const { data, error } = await this.supabase.auth.getSession();
-    if (error) {
-      throw error;
-    }
-    return data.session;
+    getSession() {
+    const session$ = defer(() => this.supabase.auth.getSession())
+    return session$;
   }
 
   get isLogged(): Object | null {
-    return !!this.user;
+    return !!this.user?.data.user;
   }
 
   get userData(): UserResponse | undefined {
@@ -110,15 +108,8 @@ export class UserService implements OnDestroy {
     return data;
   }
 
-  async getUserAvatar(avatarPath: string) {
-    const {data, error} = await this.supabase.storage.from('public').download(avatarPath);
-
-    if (error) {
-      console.error(error);
-      throw error;
-    }
-
-    return data;
+  getUserAvatarURL(avatarPath: string) {
+    return this.supabase.storage.from('public').getPublicUrl(avatarPath).data.publicUrl;
   }
 
   async updateUserAvatar(avatarPath: string, avatarFile: File): Promise<any> {
@@ -126,7 +117,8 @@ export class UserService implements OnDestroy {
       cacheControl: '3600',
       upsert: true
     })
-
+    console.log(data);
+    
     if (error) {
         console.error(error);
         throw error;
@@ -153,8 +145,8 @@ export class UserService implements OnDestroy {
     return data;
   }
 
-  getUserInfo(userId: string | undefined): Observable<PostgrestSingleResponse<any>> {
-    return defer(() => this.supabase.from('userInfo').select().eq('user_id', userId)) ;
+  getUserInfo(userId: string): Observable<PostgrestSingleResponse<any>> {
+    return defer(() => this.supabase.from('userInfo').select().eq('user_id', userId));
   }
 
   createUserInfo(userData: Object): Observable<PostgrestSingleResponse<any>> {

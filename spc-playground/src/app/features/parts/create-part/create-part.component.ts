@@ -11,7 +11,7 @@ import { PartsService } from '../parts.service';
 import { IDrawing } from 'src/app/interfaces/Drawing';
 import { IPart } from 'src/app/interfaces/Part';
 import { UserService } from '../../user/user.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -35,8 +35,8 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   constructor(
     private partsService: PartsService,
     private formBuilder: FormBuilder,
-    private userService: UserService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   //Handling the Part form and showing the dimension form
@@ -44,9 +44,8 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     if (form.invalid) {
       return;
     }
-    const userId = await this.userService.getSession();
     this.partObject = form.form.value;
-    this.partObject.creator_id = userId?.user.id;
+    this.partObject.creator_id = this.route.snapshot.params['userId'];
     this.partSubmitted = true;
     form.reset();
   }

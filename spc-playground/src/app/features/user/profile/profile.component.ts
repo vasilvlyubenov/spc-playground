@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IUserInfo } from 'src/app/interfaces/User';
 import { UserService } from '../user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -15,22 +15,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
   userId: string = '';
   userSub!: Subscription;
-  user!: IUserInfo;
+  user: IUserInfo = {} as IUserInfo;
   updateProfileSub!: Subscription;
-  avatar!: File | Blob;
+  avatarUrl!: any;
 
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   async updateProfile(form: NgForm): Promise<void | string> {
     if (form.invalid) {
       return;
     }
-    
-    debugger
+
     const { avatar, first_name, last_name } = form?.form.value;
     let avatar_path = '';
 
@@ -41,7 +40,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
       if (avatar.type !== 'image/jpeg' && avatar.type !== 'image/png') {
         this.isLoading = false;
-        return this.errorMessage = 'File type not supported'!
+        return (this.errorMessage = 'File type not supported'!);
       }
 
       if (avatar.size > 5000000) {
@@ -50,7 +49,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
 
       try {
-        if (!!this.avatar) {
+        if (!!this.avatarUrl) {
+          debugger
+          console.log(this.user.avatar_path);
+          
           fileInfo = await this.userService.updateUserAvatar(
             this.user.avatar_path,
             avatar
@@ -66,39 +68,37 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
       avatar_path = fileInfo.path;
     }
-    
+
     let obj = {};
 
-    if (this.avatar) {
-      obj = { avatar_path, user_id: this.userId, first_name, last_name }
+    if (this.avatarUrl) {
+      obj = { avatar_path, user_id: this.userId, first_name, last_name };
     } else {
-      obj = { user_id: this.userId, first_name, last_name }
+      obj = { user_id: this.userId, first_name, last_name };
     }
 
     if (!!this.user) {
       this.updateProfileSub = this.userService
-      .updateUserInfo(obj, this.userId)
-      .subscribe({
-        next: ({ data, error }) => {
-          if (error) {
-            this.errorMessage = error.message;
-            this.isLoading = false;
-            throw error;
-          }
+        .updateUserInfo(obj, this.userId)
+        .subscribe({
+          next: ({ data, error }) => {
+            if (error) {
+              this.errorMessage = error.message;
+              this.isLoading = false;
+              throw error;
+            }
 
-          form.reset();
-          this.errorMessage = '';
-          this.router.navigate([`${this.userId}/profile`]);
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
+            form.reset();
+            this.errorMessage = '';
+            this.router.navigate([`${this.userId}/profile`]);
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error(err);
+          },
+        });
     } else {
-      this.updateProfileSub = this.userService
-      .createUserInfo(obj)
-      .subscribe({
+      this.updateProfileSub = this.userService.createUserInfo(obj).subscribe({
         next: ({ data, error }) => {
           if (error) {
             this.errorMessage = error.message;
@@ -118,7 +118,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.userId = this.route.snapshot.params['userId'];
     this.userSub = this.userService.getUserInfo(this.userId).subscribe({
       next: ({ data, error }) => {
@@ -128,8 +128,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
         if (data) {
           this.user = data[0];
-          
         }
+
+        if (this.user.avatar_path) {
+          this.avatarUrl = this.userService.getUserAvatarURL(this.user.avatar_path);
+        }
+
       },
     });
   }

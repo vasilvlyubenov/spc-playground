@@ -6,12 +6,26 @@ import { inject } from '@angular/core';
 export const profileGuard: CanActivateFn = async (route, state) => {
   const userService = inject(UserService);
   const router = inject(Router);
+  let userId: string | undefined;
  
-  const userSession = await userService.getSession();
+ userService.getSession().subscribe({
+    next: ({data, error}) => {
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+      console.log(userId);
+      console.log(route.params['userId']);
+      
+      
+      userId = data.session?.user.id;
+    }
+  }).unsubscribe()
   
-  if (route.params['userId'] === userSession?.user.id) {
+  if (route.params['userId'] === userId) {
     return true;
   }
 
-  return router.createUrlTree(['/']);
+  return true;
+  // return router.createUrlTree(['/']);
 };

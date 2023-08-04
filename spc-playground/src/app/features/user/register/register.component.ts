@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
-export class RegisterComponent implements OnDestroy {
+export class RegisterComponent implements OnDestroy, OnInit {
   hidePassword: boolean = true;
   hideRepassword: boolean = true;
   selectedFileName: string = '';
@@ -61,6 +61,10 @@ export class RegisterComponent implements OnDestroy {
         console.error(err);
       },
     });
+  }
+
+  ngOnInit(): void {
+      this.userService.userData;
   }
 
   ngOnDestroy(): void {

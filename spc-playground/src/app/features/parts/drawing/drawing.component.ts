@@ -4,6 +4,7 @@ import { PartsService } from '../parts.service';
 import { UserService } from '../../user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-drawing',
@@ -18,7 +19,8 @@ export class DrawingComponent implements OnDestroy {
   constructor(
     private partsService: PartsService,
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute,
   ) {}
 
   async addDrawingHandler(form: NgForm): Promise<any> {
@@ -35,14 +37,13 @@ export class DrawingComponent implements OnDestroy {
       drawing_revision,
       revision_date,
     } = form.form.value;
-    const user = await this.userService.getSession();
-    const creator_id = user?.user.id;
+    const creator_id = this.route.snapshot.params['userId'];
     const drawingNameArr = drawing.name.split('.');
     const fileExtension = drawingNameArr[drawingNameArr.length - 1];
 
     this.isLoading = true;
 
-    if (fileExtension !== 'pdf' || fileExtension !== 'tiff') {
+    if (fileExtension !== 'pdf' && fileExtension !== 'tiff') {
       this.isLoading = false;
       return (this.errorMessage = 'File extension not supported!');
     }
