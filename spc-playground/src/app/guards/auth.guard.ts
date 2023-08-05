@@ -1,15 +1,13 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { UserService } from '../features/user/user.service';
+import { map } from 'rxjs';
 
-export const authGuard: CanActivateFn = async (route, state) => {
+export const authGuard: CanActivateFn = (route, state) => {
   const userService = inject(UserService);
   const router = inject(Router);
-  const isLogged = userService.isLogged; 
-    
-  if (!isLogged) {
-    return true;
-  }
 
-  return router.createUrlTree(['/login']);
+ return userService.getSession().pipe(
+  map(({data, error}) => data.session?.user ? true : router.createUrlTree(['login']))
+ );
 };

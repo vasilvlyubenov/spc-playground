@@ -6,11 +6,9 @@
     <mat-card-content>
       <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
       <form #form="ngForm" (ngSubmit)="updateProfile(form)">
-        <mat-form-field class="imageField">
-          <ngx-mat-file-input accept=".png, .jpg, .jpeg" type="file" placeholder="Upload avatar..." name="avatar"
+          <ngx-mat-file-input accept=".png, .jpg, .jpeg" type="file" placeholder="Change avatar..." name="avatar"
           color="primary" ngModel>
         </ngx-mat-file-input>
-        </mat-form-field>
         <mat-form-field>
           <input matInput type="text" placeholder="First name" name="first_name" [ngModel]="user.first_name ? user.first_name :''" required #firstName="ngModel">
             <mat-error *ngIf="firstName.errors?.['required']">First name required</mat-error>

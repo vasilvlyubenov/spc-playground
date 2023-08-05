@@ -5,11 +5,6 @@
     <mat-card-content>
       <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
       <form #form="ngForm" (ngSubmit)="createRegisterHandler(form)">
-        <mat-form-field class="imageField">
-          <ngx-mat-file-input accept=".png, .jpg, .jpeg" type="file" placeholder="Upload avatar..." name="avatar"
-          color="primary" ngModel>
-        </ngx-mat-file-input>
-        </mat-form-field>
         <mat-form-field>
           <input matInput type="email" placeholder="Email" name="email" ngModel required email #emailInput="ngModel">
             <mat-error *ngIf="emailInput.errors?.['required']">Email is required</mat-error>

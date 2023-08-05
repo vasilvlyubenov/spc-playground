@@ -26,18 +26,13 @@ export class RegisterComponent implements OnDestroy, OnInit {
       return;
     }
 
-    const { avatar, email, password, rePassword } = form?.form.value;
+    const {email, password, rePassword } = form?.form.value;
 
     if (password !== rePassword) {
       return this.errorMessage = 'Password doesn\'t patch'
     }
 
-    if (avatar) {
-      if (avatar.size > 5000000) {
-        return (this.errorMessage = 'File size greater than 5 MB!');
-      }
-    }
-
+    
     this.isLoading = true;
 
     this.regSubscription = this.userService.signUp(email, password).subscribe({
@@ -48,10 +43,6 @@ export class RegisterComponent implements OnDestroy, OnInit {
           this.isLoading = false;
           throw error;
         }
-        if (avatar) {
-          this.userService.uploadAvatar(avatar.name, avatar);
-        }
-
         form.reset();
 
         this.errorMessage = '';
