@@ -10,10 +10,6 @@ export const profileGuard: CanActivateFn = (route, state) => {
   return userService
     .getSession()
     .pipe(
-      map(({ data, error }) =>
-        data.session?.user.id === route.params['userId']
-          ? true
-          : router.createUrlTree([''])
-      )
+      map(({ data, error }) => data.session?.user.id === route.params['userId'] ? true : router.createUrlTree(['']))
     );
 };

@@ -12,6 +12,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'spc-playground';
   sessionSub!: Subscription;
   refreshSub!: Subscription;
+  userId: string | undefined;
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
           throw error;
         }
         refreshToken = data.session?.refresh_token;
+        this.userId = data.session?.user.id;
         
       }})
 
@@ -32,10 +34,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.refreshSub = this.userService.refreshSession(refreshToken).subscribe({
           next: ({data, error}) => {
             if (error) {
-              // if (error.status === 400) {
-                // this.router.navigate(['/login']);
-              // }
-              
               throw error;
             } 
           }

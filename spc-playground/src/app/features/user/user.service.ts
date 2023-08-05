@@ -104,7 +104,7 @@ export class UserService implements OnDestroy {
       console.error(error);
       throw error;
     }
-
+    
     return data;
   }
 
@@ -115,7 +115,7 @@ export class UserService implements OnDestroy {
   async updateUserAvatar(avatarPath: string, avatarFile: File): Promise<any> {
     const {data, error} = await this.supabase.storage.from('public').update(avatarPath, avatarFile, {
       cacheControl: '3600',
-      upsert: true
+      upsert: true,
     })
     console.log(data);
     
@@ -145,7 +145,7 @@ export class UserService implements OnDestroy {
     return data;
   }
 
-  getUserInfo(userId: string): Observable<PostgrestSingleResponse<any>> {
+  getUserInfo(userId: string | undefined): Observable<PostgrestSingleResponse<any>> {
     return defer(() => this.supabase.from('userInfo').select().eq('user_id', userId));
   }
 

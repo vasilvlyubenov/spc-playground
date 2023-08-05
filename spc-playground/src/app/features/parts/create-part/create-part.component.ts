@@ -39,6 +39,10 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
   ) {}
 
+  get dimensions() {
+    return this.dynamicFormGroup.get('dimensions') as FormArray;
+  }
+
   //Handling the Part form and showing the dimension form
   async createPartSubmitHandler(form: NgForm): Promise<any> {
     if (form.invalid) {
@@ -62,7 +66,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
 
     this.partObject.spc_dimensions = dimensionsJSON;
 
-    this.partsService.createPart(this.partObject).subscribe({
+    this.partSubscription = this.partsService.createPart(this.partObject).subscribe({
       next: ({ data, error }) => {
         if (error) {
           this.errorMessageForDim = error.message;
@@ -75,10 +79,6 @@ export class CreatePartComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
       },
     });
-  }
-
-  get dimensions() {
-    return this.dynamicFormGroup.get('dimensions') as FormArray;
   }
 
   basicForm(): FormGroup {
@@ -131,6 +131,9 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.partSubscription) {
+      this.partSubscription.unsubscribe();
+    }
     this.drawingSubscription.unsubscribe();
   }
 }

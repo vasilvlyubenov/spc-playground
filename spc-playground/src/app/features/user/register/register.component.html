@@ -13,7 +13,7 @@
         <mat-form-field>
           <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Password" name="password" ngModel required minlength="6"
             #passwordInput="ngModel">
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword" type="button">
               <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
               <mat-error *ngIf="passwordInput.errors?.['required']">Password is required</mat-error>
@@ -22,7 +22,7 @@
         <mat-form-field>
           <input matInput [type]="hideRepassword ? 'password' : 'text'" placeholder="Confirm Password" name="rePassword" ngModel required
             #rePassword="ngModel">
-            <button mat-icon-button matSuffix (click)="hideRepassword = !hideRepassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideRepassword">
+            <button mat-icon-button matSuffix (click)="hideRepassword = !hideRepassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideRepassword" type="button">
               <mat-icon>{{hideRepassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
               <mat-error *ngIf="rePassword.errors?.['required']">Confirm password is required</mat-error>

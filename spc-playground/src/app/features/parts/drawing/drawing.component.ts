@@ -1,9 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PartsService } from '../parts.service';
-import { UserService } from '../../user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, switchMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -15,15 +14,16 @@ export class DrawingComponent implements OnDestroy {
   isLoading: boolean = false;
   errorMessage: string = '';
   subscription!: Subscription;
+  result$!: Observable<any>;
+  resSub!: Subscription;
 
   constructor(
     private partsService: PartsService,
-    private userService: UserService,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
-  async addDrawingHandler(form: NgForm): Promise<any> {
+ addDrawingHandler(form: NgForm): string | void {
     let file_url = '';
 
     if (form.invalid) {
@@ -58,37 +58,34 @@ export class DrawingComponent implements OnDestroy {
       return (this.errorMessage = 'File is too big!');
     }
 
+    this.subscription = this.partsService.uploadDrawingFile(drawing.name, drawing).pipe(
+      switchMap(async ({ data, error }) => {
+        if (error) {
+          this.errorMessage = error.message;
+          throw error;
+        }
 
-    try {
-      const uploadResult = await this.partsService.uploadDrawingFile(
-        drawing.name,
-        drawing
-      );
-      file_url = uploadResult.path;
-    } catch (error) {
-      if (error) {
-        this.errorMessage = 'Something went wrong!';
-        throw error;
-      }
-    }
+        file_url = data.path;
 
-    this.subscription = this.partsService
-      .createDrawing({
-        drawing_name,
-        drawing_number,
-        drawing_revision,
-        revision_date,
-        creator_id,
-        file_url,
+        return this.partsService.createDrawing({
+          drawing_name,
+          drawing_number,
+          drawing_revision,
+          revision_date,
+          creator_id,
+          file_url,
+        })
       })
-      .subscribe({
-        next: ({ data, error }) => {
-          if (error) {
-            this.errorMessage = error.message;
-            throw error;
-          }
-        },
-      });
+    ).subscribe(res => this.result$ = res);
+
+    this.resSub = this.result$.subscribe(({error}) => {
+      if (error) {
+      this.errorMessage = error.message;
+      console.error(error);
+      throw error;
+      
+      }
+    })
 
     this.errorMessage = '';
     this.isLoading = false;
@@ -99,6 +96,7 @@ export class DrawingComponent implements OnDestroy {
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
+      this.resSub.unsubscribe();
     }
   }
 }

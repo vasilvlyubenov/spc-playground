@@ -58,6 +58,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             avatar
           );
         } else {
+          debugger
           fileInfo = await this.userService.uploadAvatar(avatar.name, avatar);
         }
       } catch (error) {
@@ -71,7 +72,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     let obj = {};
 
-    if (this.avatarUrl) {
+    if (!this.avatarUrl) {
       obj = { avatar_path, user_id: this.userId, first_name, last_name };
     } else {
       obj = { user_id: this.userId, first_name, last_name };
@@ -90,7 +91,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
             form.reset();
             this.errorMessage = '';
-            this.router.navigate([`${this.userId}/profile`]);
+            this.getUserInfo(this.userId);
             this.isLoading = false;
           },
           error: (err) => {
@@ -108,7 +109,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
           form.reset();
           this.errorMessage = '';
-          this.router.navigate([`${this.userId}/profile`]);
+          this.getUserInfo(this.userId);
           this.isLoading = false;
         },
         error: (err) => {
@@ -118,9 +119,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
-    this.userId = this.route.snapshot.params['userId'];
-    this.userSub = this.userService.getUserInfo(this.userId).subscribe({
+  private getUserInfo(userId: string) {
+    this.userSub = this.userService.getUserInfo(userId).subscribe({
       next: ({ data, error }) => {
         if (error) {
           console.log(error);
@@ -136,6 +136,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
       },
     });
+  }
+
+  ngOnInit(): void {
+    this.userId = this.route.snapshot.params['userId'];
+    this.getUserInfo(this.userId);
   }
 
   ngOnDestroy(): void {

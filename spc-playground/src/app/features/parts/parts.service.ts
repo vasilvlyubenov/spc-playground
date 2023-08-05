@@ -20,7 +20,7 @@ export class PartsService {
     );
   }
 
-  createDrawing(data: Object): Observable<PostgrestSingleResponse<null>> {
+  createDrawing(data: Object): Observable<PostgrestSingleResponse<any>> {
     return defer(() => this.supabase.from(`drawings`).insert(data));
   }
 
@@ -28,33 +28,18 @@ export class PartsService {
     return defer(() => this.supabase.from('drawings').select());
   }
 
-  async uploadDrawingFile(drawingName: string, drawingFile: File): Promise<any> {
+  uploadDrawingFile(drawingName: string, drawingFile: File): Observable<any> {
     const generatedName = Date.now().toString();
     const nameToArray = drawingName.split('.');
     const newFileName = `${generatedName}.${
       nameToArray[nameToArray.length - 1]
     }`;
-    const { data, error } = await this.supabase.storage
-      .from('public')
-      .upload(`drawings/${newFileName}`, drawingFile);
 
-    if (error) {
-      throw error;
-    }
-
-    return data;
+    return defer(() => this.supabase.storage.from('public').upload(`drawings/${newFileName}`, drawingFile));
   }
 
-  async getDrawingFile(filePath: string): Promise<any> {
-    const { data , error } = await this.supabase.storage
-      .from('public')
-      .download(filePath);
-
-      if (error) {
-        throw error
-      }
-
-      return data;
+  getDrawingFile(filePath: string): Observable<any> {
+    return defer(() => this.supabase.storage.from('public').download(filePath));
   }
 
   createPart(part: Object): Observable<any> {

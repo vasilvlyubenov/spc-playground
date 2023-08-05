@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, mergeMap, switchMap } from 'rxjs';
 import { UserService } from '../../user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BatchService } from '../batch.service';
@@ -12,9 +12,11 @@ import { BatchService } from '../batch.service';
 })
 export class BatchComponent implements OnDestroy, OnInit {
   isLoading: boolean = false;
-  error: string = '';
+  errorMessage: string = '';
   createBatchSubscription!: Subscription;
   partId: string = '';
+  createBatch$!: Observable<any>;
+  subResult!: Subscription;
 
   constructor(
     private batchService: BatchService,
@@ -30,31 +32,40 @@ export class BatchComponent implements OnDestroy, OnInit {
 
     this.isLoading = true;
     const { batch_number, approved_by, number_of_cavities, approval_date } = form.form.value;
-    const userId = this.route.snapshot.params['userId'];
+    
+    this.createBatchSubscription = this.userService.getSession().pipe(
+      switchMap(async ({data, error}) => {
+        if (error) {
+          this.errorMessage = error.message;
+          throw error;
+        }
 
-    this.createBatchSubscription = this.batchService
-      .createBatch({
-        batch_number,
-        approved_by,
-        number_of_cavities,
-        approval_date,
-        creator_id: userId,
-        part_id: this.partId,
+        const creator_id = data.session?.user.id;
+
+        return this.batchService.createBatch({
+          batch_number,
+          approved_by,
+          number_of_cavities,
+          approval_date,
+          creator_id,
+          part_id: this.partId,
+        })
       })
-      .subscribe({
-        next: ({ data, error }) => {
-          if (error) {
-            if (error.code === '23505') {
-              this.error = 'Batch number already exists!';
-            } else {
-              this.error = error.message;
-            }
-            this.isLoading = false;
-            throw error;
-          }
-          this.router.navigate(['/']);
-        },
-      });
+    ).subscribe(res =>this.createBatch$ = res);
+
+
+    this.subResult = this.createBatch$.subscribe({
+      next: ({data, error}) => {
+        if (error) {
+          this.errorMessage = error.message;
+          this.isLoading = false;
+          throw error;
+        }
+
+        this.router.navigate(['/']);
+      }
+    })
+
   }
 
   ngOnInit(): void {
@@ -64,6 +75,7 @@ export class BatchComponent implements OnDestroy, OnInit {
   ngOnDestroy(): void {
     if (this.createBatchSubscription) {
       this.createBatchSubscription.unsubscribe();
+      this.subResult.unsubscribe();
     }
   }
 }

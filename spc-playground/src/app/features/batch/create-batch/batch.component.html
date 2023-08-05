@@ -2,7 +2,7 @@
 <div class="container" *ngIf="!isLoading">
   <mat-card>
     <mat-card-title>Create batch</mat-card-title>
-    <mat-error *ngIf="error">{{error}}</mat-error>
+    <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
     <mat-card-content>
       <form #form="ngForm" (ngSubmit)="createBatchSubmitHandler(form)">
         <mat-form-field>

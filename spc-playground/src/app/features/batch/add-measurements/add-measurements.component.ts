@@ -134,8 +134,7 @@ export class AddMeasurementsComponent implements OnInit, OnDestroy {
 
         const spcDimensions = JSON.parse(data[0].spc_dimensions);
 
-        if (spcDimensions.length === 0) {
-        } else {
+        if (spcDimensions.length > 0) {
           this.partSpcDimensions = spcDimensions;
         }
         this.isLoading = false;

@@ -6,7 +6,7 @@ import { map } from 'rxjs';
 export const guestGuard: CanActivateFn = (route, state) => {
   const userService = inject(UserService);
   const router = inject(Router);
-  debugger
+  
   return userService.getSession().pipe(
     map(({data, error}) => !data.session?.user ? true : router.createUrlTree(['']))
     );
