@@ -23,7 +23,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router
   ) { }
 
   editInfo() {
