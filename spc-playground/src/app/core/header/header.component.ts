@@ -18,12 +18,15 @@ export class HeaderComponent implements OnDestroy, OnInit {
   sessionSub!: Subscription;
   onInitSub!: Subscription;
 
-  constructor(private userService: UserService, private router: Router, private route: ActivatedRoute) { }
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   get isLogged(): boolean {
     return !!this.userService.isLogged;
   }
-
 
   getSession() {
     this.sessionSub = this.userService.getSession().subscribe({
@@ -38,7 +41,6 @@ export class HeaderComponent implements OnDestroy, OnInit {
       },
     });
   }
-
 
   logout(): void {
     this.logoutSubscription = this.userService.signOut().subscribe({
@@ -57,43 +59,23 @@ export class HeaderComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    console.log();
-    
-    let userId;
-    this.onInitSub = this.userService.getSession().subscribe({
-      next: ({ data, error }) => {
-        if (error) {
-          console.error(error);
-          throw error;
-        }
+    this.getSession();
+    if (this.user) {
+      this.userService
+        .getUserInfo(this.user?.id)
+        .pipe(
+          switchMap(async ({ data, error }) => {
+            if (error) {
+              console.error(error);
+              throw error;
+            }
+            const avatarUrl = data[0].avatar_path;
+            console.log(avatarUrl);
 
-        if (data.session) {
-          this.user = data.session?.user;
-          userId = data.session.user.id;
-          console.log(userId);
-          
-        }
-      },
-    });
-    console.log(this.userService.userData?.data.user?.id);
-    
-    this.userService
-      .getUserInfo(this.userService.userData?.data.user?.id)
-      .pipe(
-        switchMap(async ({ data, error }) => {
-
-          if (error) {
-            console.error(error);
-            throw error;
-          }
-
-          const avatarUrl = data[0].avatar_path;
-          console.log(avatarUrl);
-
-          return this.userService.getUserAvatarURL(avatarUrl);
-        })
-      )
-      .subscribe((url) => (this.avatarURL = url));
+            return this.userService.getUserAvatarURL(avatarUrl);
+          })
+        ).subscribe((url) => (this.avatarURL = url));
+    }
   }
 
   ngOnDestroy(): void {

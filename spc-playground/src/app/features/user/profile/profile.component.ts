@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
   userId: string = '';
   userSub!: Subscription;
+  isForEdit: boolean = true;
   user: IUserInfo = {} as IUserInfo;
   updateProfileSub!: Subscription;
   avatarUrl!: any;
@@ -24,6 +25,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router
   ) { }
+
+  editInfo() {
+    this.isForEdit = !this.isForEdit;
+  }
 
   async updateProfile(form: NgForm): Promise<void | string> {
     if (form.invalid) {
@@ -92,7 +97,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
             form.reset();
             this.errorMessage = '';
             this.getUserInfo(this.userId);
-            this.isLoading = false;
           },
           error: (err) => {
             console.error(err);
@@ -110,13 +114,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
           form.reset();
           this.errorMessage = '';
           this.getUserInfo(this.userId);
-          this.isLoading = false;
         },
         error: (err) => {
           console.error(err);
         },
       });
     }
+    this.isLoading = true;
   }
 
   private getUserInfo(userId: string) {
@@ -133,12 +137,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (this.user.avatar_path) {
           this.avatarUrl = this.userService.getUserAvatarURL(this.user.avatar_path);
         }
-
+      this.isLoading = false;
       },
     });
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.userId = this.route.snapshot.params['userId'];
     this.getUserInfo(this.userId);
   }

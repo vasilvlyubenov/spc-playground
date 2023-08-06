@@ -22,13 +22,14 @@ import { SpcChartsComponent } from './spc-charts/spc-charts.component';
 import { CdkTableModule } from '@angular/cdk/table';
 import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
+import { BatchInfoComponent } from './batch-info/batch-info.component';
 
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
 
 @NgModule({
-  declarations: [BatchComponent, BatchListComponent, CloseBatchComponent, AddMeasurementsComponent, SpcChartsComponent],
+  declarations: [BatchComponent, BatchListComponent, CloseBatchComponent, AddMeasurementsComponent, SpcChartsComponent, BatchInfoComponent],
   imports: [
     CommonModule,
     MatButtonModule,
