@@ -28,14 +28,17 @@ export class PartsService {
     return defer(() => this.supabase.from('drawings').select());
   }
 
-  uploadDrawingFile(drawingName: string, drawingFile: File): Observable<any> {
+  async uploadDrawingFile(drawingName: string, drawingFile: File): Promise<Object> {
     const generatedName = Date.now().toString();
     const nameToArray = drawingName.split('.');
     const newFileName = `${generatedName}.${
       nameToArray[nameToArray.length - 1]
     }`;
-
-    return defer(() => this.supabase.storage.from('public').upload(`drawings/${newFileName}`, drawingFile));
+    const {data, error} = await this.supabase.storage.from('public').upload(`drawings/${newFileName}`, drawingFile);
+    if (error) {
+      throw error;
+    }
+    return data.path;
   }
 
   getDrawingFile(filePath: string): Observable<any> {
@@ -51,7 +54,7 @@ export class PartsService {
   }
 
   getPartById(partId: string) {
-    return defer(() => this.supabase.from('parts').select().eq('id', partId));
+    return defer(() => this.supabase.from('parts').select(`*, drawings (*)`).eq('id', partId));
   }
 
 }

@@ -18,17 +18,15 @@ export class DrawingComponent implements OnDestroy, OnInit {
   sessionSubscription!: Subscription;
   createDrawingSub!: Subscription;
   userId!: string | undefined;
+  fileUrl!: Object;
 
   constructor(
     private partsService: PartsService,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute,
     private userService: UserService
   ) {}
 
-  addDrawingHandler(form: NgForm): string | void {
-    let file_url = '';
-
+  async addDrawingHandler(form: NgForm): Promise<string | void> {
     if (form.invalid) {
       return;
     }
@@ -60,19 +58,8 @@ export class DrawingComponent implements OnDestroy, OnInit {
       return (this.errorMessage = 'File is too big!');
     }
 
-    this.uploadSub = this.partsService
-      .uploadDrawingFile(drawing.name, drawing)
-      .subscribe({
-        next: ({ data, error }) => {
-          if (error) {
-            this.errorMessage = error.message;
-            throw error;
-          }
-
-          file_url = data.path;
-        },
-      });
-
+    this.fileUrl = await this.partsService.uploadDrawingFile(drawing.name, drawing)
+    debugger
     this.createDrawingSub = this.partsService
       .createDrawing({
         drawing_name,
@@ -80,12 +67,13 @@ export class DrawingComponent implements OnDestroy, OnInit {
         drawing_revision,
         revision_date,
         creator_id: this.userId,
-        file_url,
+        file_url: this.fileUrl,
       })
       .subscribe(({ data, error }) => {
         if (error) {
           this.errorMessage = error.message;
           console.error(error);
+          this.isLoading = false;
           throw error;
         }
 
