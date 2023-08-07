@@ -20,7 +20,7 @@ export class AddMeasurementsComponent implements OnInit, OnDestroy {
   getPartSub!: Subscription;
   batchId: string = '';
   batchSpc!: string;
-  partSpcDimensions!: Array<ISpc>;
+  partSpcDimensions!: Array<ISpc> | null;
 
   constructor(
     private batchService: BatchService,
@@ -131,11 +131,12 @@ export class AddMeasurementsComponent implements OnInit, OnDestroy {
           this.router.navigate([`${partId}/batch-list`]);
           throw error;
         }
-
+        debugger
         const spcDimensions = JSON.parse(data[0].spc_dimensions);
 
-        if (spcDimensions.length > 0) {
+        if (spcDimensions !== null && spcDimensions.length > 0) {
           this.partSpcDimensions = spcDimensions;
+        } else {
         }
         this.isLoading = false;
       },

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable, Subscription, mergeMap, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { UserService } from '../../user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BatchService } from '../batch.service';
@@ -13,10 +13,10 @@ import { BatchService } from '../batch.service';
 export class BatchComponent implements OnDestroy, OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
-  createBatchSubscription!: Subscription;
+  sessionSubscription!: Subscription;
   partId: string = '';
-  createBatch$!: Observable<any>;
-  subResult!: Subscription;
+  userId: string | undefined;
+  createBatchSub!: Subscription;
 
   constructor(
     private batchService: BatchService,
@@ -31,51 +31,50 @@ export class BatchComponent implements OnDestroy, OnInit {
     }
 
     this.isLoading = true;
-    const { batch_number, approved_by, number_of_cavities, approval_date } = form.form.value;
-    
-    this.createBatchSubscription = this.userService.getSession().pipe(
-      switchMap(async ({data, error}) => {
-        if (error) {
-          this.errorMessage = error.message;
-          throw error;
-        }
+    const { batch_number, approved_by, number_of_cavities, approval_date } =
+      form.form.value;
 
-        const creator_id = data.session?.user.id;
-
-        return this.batchService.createBatch({
-          batch_number,
-          approved_by,
-          number_of_cavities,
-          approval_date,
-          creator_id,
-          part_id: this.partId,
-        })
+    this.createBatchSub = this.batchService
+      .createBatch({
+        batch_number,
+        approved_by,
+        number_of_cavities,
+        approval_date,
+        creator_id: this.userId,
+        part_id: this.partId,
       })
-    ).subscribe(res =>this.createBatch$ = res);
+      .subscribe({
+        next: ({ data, error }) => {
+          if (error) {
+            this.errorMessage = error.message;
+            this.isLoading = false;
+            throw error;
+          }
 
-
-    this.subResult = this.createBatch$.subscribe({
-      next: ({data, error}) => {
-        if (error) {
-          this.errorMessage = error.message;
-          this.isLoading = false;
-          throw error;
-        }
-
-        this.router.navigate(['/']);
-      }
-    })
-
+          this.router.navigate(['/']);
+        },
+      });
   }
 
   ngOnInit(): void {
     this.partId = this.route.snapshot.params['partId'];
+
+    this.sessionSubscription = this.userService.getSession().subscribe({
+      next: ({ data, error }) => {
+        if (error) {
+          this.errorMessage = error.message;
+          throw error;
+        }
+        this.userId = data.session?.user.id;
+      },
+    });
   }
 
   ngOnDestroy(): void {
-    if (this.createBatchSubscription) {
-      this.createBatchSubscription.unsubscribe();
-      this.subResult.unsubscribe();
+    this.sessionSubscription.unsubscribe();
+
+    if (this.createBatchSub) {
+      this.createBatchSub.unsubscribe();
     }
   }
 }

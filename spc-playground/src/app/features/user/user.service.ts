@@ -5,7 +5,6 @@ import {
   UserResponse,
   AuthResponse,
   PostgrestSingleResponse,
-  Session,
 } from '@supabase/supabase-js';
 import { BehaviorSubject, Observable, Subscription, defer, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -23,9 +22,8 @@ export class UserService implements OnDestroy {
   private supabase: SupabaseClient;
   user!: UserResponse | undefined;
 
-    getSession() {
-    const session$ = defer(() => this.supabase.auth.getSession())
-    return session$;
+  getSession() {
+    return defer(() => this.supabase.auth.getSession())
   }
 
   get isLogged(): Object | null {

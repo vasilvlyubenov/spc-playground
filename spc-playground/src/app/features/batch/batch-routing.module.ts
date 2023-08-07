@@ -10,13 +10,13 @@ import { BatchInfoComponent } from './batch-info/batch-info.component';
 
 const routes: Routes = [
   {
-    path: 'batch-list',
-    component: BatchListComponent,
-  },
-  {
     path: 'create-batch',
     component: BatchComponent,
     canActivate: [authGuard]
+  },
+  {
+    path: 'batch-list',
+    component: BatchListComponent,
   },
   {
     path: 'batch-list/:batchId/close-batch',

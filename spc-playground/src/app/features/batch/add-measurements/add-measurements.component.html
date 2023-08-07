@@ -1,7 +1,7 @@
 <app-spinner *ngIf="isLoading" />
 <div class="container" *ngIf="!isLoading">
-    <h2 *ngIf="partSpcDimensions.length === 0">This part number has no SPC dimensions defined</h2>
-    <ng-container *ngIf="partSpcDimensions.length > 0">
+    <h2 *ngIf="!partSpcDimensions">This part number has no SPC dimensions defined</h2>
+    <ng-container *ngIf="partSpcDimensions">
         <mat-card>
             <mat-card-title>Measurements</mat-card-title>
             <mat-card-content>

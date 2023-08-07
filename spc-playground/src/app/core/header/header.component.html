@@ -18,7 +18,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false" (click)="getSession()" >
-              <img class="user-img" [src]="avatarURL ? avatarURL : '../../../assets/user.png'" />
+              <img class="user-img" src="../../../assets/user.png" />
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" [routerLink]="[user?.id, 'profile']" (click)="isMenuCollapsed = true">Profile</a>

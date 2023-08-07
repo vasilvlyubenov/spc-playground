@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from '@supabase/supabase-js';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription} from 'rxjs';
 import { UserService } from 'src/app/features/user/user.service';
 
 @Component({
@@ -9,20 +9,18 @@ import { UserService } from 'src/app/features/user/user.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
-export class HeaderComponent implements OnDestroy, OnInit {
+export class HeaderComponent implements OnDestroy {
   isMenuCollapsed: boolean = true;
   logoutSubscription: Subscription | undefined;
   avatarSub: Subscription | undefined;
   user!: User | undefined;
-  avatarURL!: string;
   sessionSub!: Subscription;
   onInitSub!: Subscription;
 
   constructor(
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  ) { }
 
   get isLogged(): boolean {
     return !!this.userService.isLogged;
@@ -56,26 +54,6 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
     this.isMenuCollapsed = true;
     this.router.navigate(['/']);
-  }
-
-  ngOnInit(): void {
-    this.getSession();
-    if (this.user) {
-      this.userService
-        .getUserInfo(this.user?.id)
-        .pipe(
-          switchMap(async ({ data, error }) => {
-            if (error) {
-              console.error(error);
-              throw error;
-            }
-            const avatarUrl = data[0].avatar_path;
-            console.log(avatarUrl);
-
-            return this.userService.getUserAvatarURL(avatarUrl);
-          })
-        ).subscribe((url) => (this.avatarURL = url));
-    }
   }
 
   ngOnDestroy(): void {

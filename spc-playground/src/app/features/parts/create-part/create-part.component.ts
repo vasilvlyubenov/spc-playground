@@ -11,8 +11,9 @@ import { PartsService } from '../parts.service';
 import { IDrawing } from 'src/app/interfaces/Drawing';
 import { IPart } from 'src/app/interfaces/Part';
 import { UserService } from '../../user/user.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
+import { UserResponse } from '@supabase/supabase-js';
 
 @Component({
   selector: 'app-create-part',
@@ -28,6 +29,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
   partSubmitted: boolean = false;
   errorMessageForDim: string = '';
   partObject!: IPart;
+  user!: UserResponse | undefined;
 
   dynamicFormGroup!: FormGroup;
   dynamicFormArray!: FormArray;
@@ -36,7 +38,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
     private partsService: PartsService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
+    private userService: UserService,
   ) {}
 
   get dimensions() {
@@ -49,7 +51,7 @@ export class CreatePartComponent implements OnInit, OnDestroy {
       return;
     }
     this.partObject = form.form.value;
-    this.partObject.creator_id = this.route.snapshot.params['userId'];
+    this.partObject.creator_id = this.user?.data.user?.id;
     this.partSubmitted = true;
     form.reset();
   }
@@ -124,6 +126,8 @@ export class CreatePartComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
     });
+
+    this.user = this.userService.userData;
 
     this.dynamicFormGroup = this.formBuilder.group({
       dimensions: this.formBuilder.array([]),

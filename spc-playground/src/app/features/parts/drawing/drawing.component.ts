@@ -1,29 +1,32 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PartsService } from '../parts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../user/user.service';
 
 @Component({
   selector: 'app-drawing',
   templateUrl: './drawing.component.html',
   styleUrls: ['./drawing.component.css'],
 })
-export class DrawingComponent implements OnDestroy {
+export class DrawingComponent implements OnDestroy, OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
-  subscription!: Subscription;
-  result$!: Observable<any>;
-  resSub!: Subscription;
+  uploadSub!: Subscription;
+  sessionSubscription!: Subscription;
+  createDrawingSub!: Subscription;
+  userId!: string | undefined;
 
   constructor(
     private partsService: PartsService,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private userService: UserService
   ) {}
 
- addDrawingHandler(form: NgForm): string | void {
+  addDrawingHandler(form: NgForm): string | void {
     let file_url = '';
 
     if (form.invalid) {
@@ -37,7 +40,6 @@ export class DrawingComponent implements OnDestroy {
       drawing_revision,
       revision_date,
     } = form.form.value;
-    const creator_id = this.route.snapshot.params['userId'];
     const drawingNameArr = drawing.name.split('.');
     const fileExtension = drawingNameArr[drawingNameArr.length - 1];
 
@@ -58,45 +60,60 @@ export class DrawingComponent implements OnDestroy {
       return (this.errorMessage = 'File is too big!');
     }
 
-    this.subscription = this.partsService.uploadDrawingFile(drawing.name, drawing).pipe(
-      switchMap(async ({ data, error }) => {
+    this.uploadSub = this.partsService
+      .uploadDrawingFile(drawing.name, drawing)
+      .subscribe({
+        next: ({ data, error }) => {
+          if (error) {
+            this.errorMessage = error.message;
+            throw error;
+          }
+
+          file_url = data.path;
+        },
+      });
+
+    this.createDrawingSub = this.partsService
+      .createDrawing({
+        drawing_name,
+        drawing_number,
+        drawing_revision,
+        revision_date,
+        creator_id: this.userId,
+        file_url,
+      })
+      .subscribe(({ data, error }) => {
+        if (error) {
+          this.errorMessage = error.message;
+          console.error(error);
+          throw error;
+        }
+
+        form.reset();
+        this.errorMessage = '';
+        this.isLoading = false;
+        this.snackBar.open('Success', 'Close', {
+          duration: 5000,
+        });
+      });
+  }
+
+  ngOnInit(): void {
+    this.sessionSubscription = this.userService.getSession().subscribe({
+      next: ({ data, error }) => {
         if (error) {
           this.errorMessage = error.message;
           throw error;
         }
-
-        file_url = data.path;
-
-        return this.partsService.createDrawing({
-          drawing_name,
-          drawing_number,
-          drawing_revision,
-          revision_date,
-          creator_id,
-          file_url,
-        })
-      })
-    ).subscribe(res => this.result$ = res);
-
-    this.resSub = this.result$.subscribe(({error}) => {
-      if (error) {
-      this.errorMessage = error.message;
-      console.error(error);
-      throw error;
-      
-      }
-    })
-
-    this.errorMessage = '';
-    this.isLoading = false;
-    this.snackBar.open('Success', 'Close', {
-      duration: 5000,
+        this.userId = data.session?.user.id;
+      },
     });
   }
+
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      this.resSub.unsubscribe();
+    if (this.uploadSub) {
+      this.uploadSub.unsubscribe();
+      this.createDrawingSub.unsubscribe();
     }
   }
 }
