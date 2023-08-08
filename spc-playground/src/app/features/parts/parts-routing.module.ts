@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DrawingComponent } from './drawing/drawing.component';
 import { authGuard } from 'src/app/guards/auth.guard';
 import { CreatePartComponent } from './create-part/create-part.component';
-import { PartComponent } from './part/part.component';
 import { PartDetailsComponent } from './part-details/part-details.component';
+import { PartComponent } from './part/part.component';
 
 
 const routes: Routes = [
@@ -26,7 +26,11 @@ const routes: Routes = [
   {
     path: ':partId/details',
     component: PartDetailsComponent
-  }
+  },
+  {
+    path: ':partId',
+    loadChildren: () => import('../../features/batch/batch.module').then((m) => m.BatchModule),
+  },
 ];
 
 @NgModule({

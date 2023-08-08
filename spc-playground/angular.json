@@ -16,7 +16,8 @@
             "allowedCommonJsDependencies": [
               "plotly.js-dist-min",
               "websocket",
-              "cross-fetch"
+              "cross-fetch",
+              "file-saver"
             ],
             "outputPath": "dist",
             "index": "src/index.html",

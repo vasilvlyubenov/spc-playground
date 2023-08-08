@@ -21,6 +21,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { PartDetailsComponent } from './part-details/part-details.component';
 
+
 @NgModule({
   declarations: [DrawingComponent, CreatePartComponent, PartComponent, PartDetailsComponent],
   imports: [
@@ -40,7 +41,7 @@ import { PartDetailsComponent } from './part-details/part-details.component';
     MatSelectModule,
     MatExpansionModule,
     ReactiveFormsModule,
-    MatDividerModule
+    MatDividerModule,
   ],
 })
 export class PartsModule {}

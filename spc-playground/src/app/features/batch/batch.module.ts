@@ -47,7 +47,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
     MatNativeDateModule,
     MatSelectModule,
     PlotlyModule,
-    CdkTableModule
+    CdkTableModule,
   ]
 })
 export class BatchModule { }

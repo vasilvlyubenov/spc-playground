@@ -11,14 +11,15 @@ import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserModule } from './features/user/user.module';
-import { PageNotFoundModule } from './page404/page-not-found.module';
 import { PartsModule } from './features/parts/parts.module';
+import { PageNotFoundComponent } from './features/page-not-found/page-not-found.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    PageNotFoundComponent,
 
   ],
   imports: [
@@ -29,7 +30,6 @@ import { PartsModule } from './features/parts/parts.module';
     NgbModule,
     UserModule,
     PartsModule,
-    PageNotFoundModule,
     AppRoutingModule,
   ],
   providers: [],
