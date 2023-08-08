@@ -6,3 +6,18 @@
     min-height: 81vh;
     width: 100%;
   }
+
+  table {
+    max-width: 500px;
+    text-align: center;
+  }
+
+  table th {
+    max-width: 70px;
+    text-align: left;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+  }

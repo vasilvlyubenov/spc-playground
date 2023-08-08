@@ -1,3 +1,62 @@
 <div class="container">
-    <p>Page is under construction!</p>
+
+    <table class="table table-bordered">
+        <thead>
+          <tr class="table-light">
+            <th colspan="2" style="text-align: center;">Part details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="table-light">Part name</th>
+            <td>{{partInfo.part_name}}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light">Part number</th>
+            <td>{{partInfo.part_number}}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light">Part index</th>
+            <td>{{partInfo.part_index}}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light">Revision date</th>
+            <td>{{partInfo.revision_date | date}}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light">SPC dimensions</th>
+            <td>
+                <p *ngIf="!spcDimensions">None</p>
+                <ng-container *ngIf="spcDimensions">
+                <ul *ngFor="let dim of spcDimensions;">
+                    <li>{{dim.dimension}} +{{dim.upperLimit}}/-{{dim.lowerLimit}}</li>
+                </ul>
+            </ng-container>
+            </td>
+          </tr>
+          <tr>
+            <th style="text-align: center;" class="table-light" colspan="2">Drawing</th>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light"></th>
+            <td><button mat-stroked-button color="primary" (click)="downloadDrawing()">Download</button></td>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light">Drawing name</th>
+            <td>{{partInfo.drawings.drawing_name}}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light">Drawing number</th>
+            <td>{{partInfo.drawings.drawing_number}}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light">Drawing revision</th>
+            <td>{{partInfo.drawings.drawing_revision}}</td>
+          </tr>
+          <tr>
+            <th scope="row" class="table-light">Revision date</th>
+            <td>{{partInfo.drawings.revision_date | date}}</td>
+          </tr>
+        </tbody>
+      </table>
 </div>

@@ -42,7 +42,7 @@ export class PartsService {
   }
 
   getDrawingFile(filePath: string): Observable<any> {
-    return defer(() => this.supabase.storage.from('public').download(filePath));
+    return defer(() => this.supabase.storage.from('public').download(`public/${filePath}`));
   }
 
   createPart(part: Object): Observable<any> {

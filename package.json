@@ -1,13 +1,17 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "file-saver": "^2.0.5"
+  },
   "name": "spc-playground",
   "description": "Basic SPC software",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vasil Lyubenov",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/file-saver": "^2.0.5"
+  }
 }

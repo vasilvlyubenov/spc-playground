@@ -1,3 +1,5 @@
+import { IDrawing } from "./Drawing";
+
 export interface IPart {
     id: number,
     part_name: string,
