@@ -15,7 +15,7 @@ export class BatchListComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
   isLoading: boolean = false;
   partId: string = '';
-  displayedColumns: string[] = ['Batch number', 'Date approved', 'Date closed', 'SPC measuremetns', 'SPC charts', 'Info' , 'button'];
+  displayedColumns: string[] = ['Batch number', 'Date approved', 'Approved by','Date closed', 'Closed by', 'SPC measuremetns', 'SPC charts', 'button'];
   filteredBatchSub!: Subscription;
 
 

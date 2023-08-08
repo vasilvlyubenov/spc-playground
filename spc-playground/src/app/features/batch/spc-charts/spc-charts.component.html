@@ -1,7 +1,7 @@
 <app-spinner *ngIf="isLoading" />
 <div class="container" *ngIf="!isLoading">
     <div class="header">
-        <h2 *ngIf="graphArray.length === 0">There is no data about measurements yet!</h2>
+        <h2 *ngIf="graphArray.length === 0">There is no data about measurements!</h2>
     </div>
     <ng-container *ngIf="graphArray.length > 0">
         <h6>Please note that control limits are based on upper and lower limits! The actual formulas are not yet used in the project!</h6>

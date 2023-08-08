@@ -6,7 +6,6 @@ import { BatchListComponent } from './batch-list/batch-list.component';
 import { CloseBatchComponent } from './close-batch/close-batch.component';
 import { AddMeasurementsComponent } from './add-measurements/add-measurements.component';
 import { SpcChartsComponent } from './spc-charts/spc-charts.component';
-import { BatchInfoComponent } from './batch-info/batch-info.component';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 
 const routes: Routes = [
@@ -32,10 +31,6 @@ const routes: Routes = [
   {
     path: 'batch-list/:batchId/spc-charts',
     component: SpcChartsComponent,
-  },
-  {
-    path: 'batch-list/:batchId/info',
-    component: BatchInfoComponent,
   },
   {
     path: '**',

@@ -15,17 +15,31 @@
             <td mat-cell *matCellDef="let element"> {{element.approval_date | date:"MM.dd.yyyy" }} </td>
         </ng-container>
 
+        <!--Approved by column-->
+        <ng-container matColumnDef="Approved by">
+            <th mat-header-cell *matHeaderCellDef> Approved by </th>
+            <td mat-cell *matCellDef="let element"> {{element.approved_by}} </td>
+        </ng-container>
+
         <!--Date closed column-->
         <ng-container matColumnDef="Date closed">
             <th mat-header-cell *matHeaderCellDef> Date closed </th>
-            <td mat-cell *matCellDef="let element" ><span [ngClass]="element.closed_date ? '' : 'open'">{{ element.closed_date ? [element.closed_date | date:"MM.dd.yyyy"] :
-                'OPEN' }}</span>  </td>
+            <td mat-cell *matCellDef="let element"><span [ngClass]="element.closed_date ? '' : 'open'">{{
+                    element.closed_date ? [element.closed_date | date:"MM.dd.yyyy"] :
+                    'OPEN' }}</span> </td>
+        </ng-container>
+
+        <!--Closed by column-->
+        <ng-container matColumnDef="Closed by">
+            <th mat-header-cell *matHeaderCellDef> Closed by </th>
+            <td mat-cell *matCellDef="let element"> {{element.closed_by ? element.closed_by : ''}}</td>
         </ng-container>
 
         <!--Measurements link column-->
         <ng-container matColumnDef="SPC measuremetns">
             <th mat-header-cell *matHeaderCellDef> SPC measuremetns </th>
-            <td mat-cell *matCellDef="let element"> <a [routerLink]="[element.id, 'add-measurements']" [ngStyle]="{pointerEvents: element.closed_date ? 'none' : ''}"> Add measuremetns
+            <td mat-cell *matCellDef="let element"> <a [routerLink]="[element.id, 'add-measurements']"
+                    [ngStyle]="{pointerEvents: element.closed_date ? 'none' : ''}"> Add measuremetns
                 </a></td>
         </ng-container>
 
@@ -35,18 +49,13 @@
             <td mat-cell *matCellDef="let element"> <a [routerLink]="[element.id, 'spc-charts']"> Show charts </a></td>
         </ng-container>
 
-        <!--Info link column-->
-        <ng-container matColumnDef="Info">
-            <th mat-header-cell *matHeaderCellDef> Batch info </th>
-            <td mat-cell *matCellDef="let element"> <a [routerLink]="[element.id, 'info']"> Show info </a></td>
-        </ng-container>
-
         <!--Status column-->
         <ng-container matColumnDef="button">
             <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element"><button mat-raised-button [color]="!element.closed_date ? 'primary' : 'basic'"
-                        [disabled]="element.closed_date ? true : false" [routerLink]="[element.id, 'close-batch']">
-                        {{!element.closed_date ? 'CLOSE' : 'Closed'}}</button></td>
+            <td mat-cell *matCellDef="let element"><button mat-raised-button
+                    [color]="!element.closed_date ? 'primary' : 'basic'" [disabled]="element.closed_date ? true : false"
+                    [routerLink]="[element.id, 'close-batch']">
+                    {{!element.closed_date ? 'CLOSE' : 'Closed'}}</button></td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
