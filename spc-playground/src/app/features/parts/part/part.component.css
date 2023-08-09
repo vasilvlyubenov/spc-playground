@@ -14,10 +14,9 @@
   }
   a{
     color: rgb(88, 88, 88);
-    font-size: 2.3vh;
-
+    font-size: clamp(0.6rem, 0.9vw + 3px, 1.7rem);
   }
 
   mat-panel-title, mat-panel-description {
-    font-size: 2.3vh;
+    font-size: clamp(0.6rem, 0.9vw + 3px, 1.7rem);
   }
