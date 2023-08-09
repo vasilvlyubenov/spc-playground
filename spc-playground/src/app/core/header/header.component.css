@@ -46,3 +46,8 @@ img {
 nav {
     z-index: 1;
 }
+
+button {
+    color: rgb(190, 190, 190);
+    border-color: rgb(190, 190, 190);
+}

@@ -11,9 +11,9 @@
             <mat-error *ngIf="batchNumber.errors?.['required']">Batch number is required</mat-error>
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="text" placeholder="Approvel by" name="approved_by" ngModel required
+            <input matInput type="text" placeholder="Approved by" name="approved_by" ngModel required
               #approvedBy="ngModel">
-              <mat-error *ngIf="approvedBy.errors?.['required']">Approvel by is required</mat-error>
+              <mat-error *ngIf="approvedBy.errors?.['required']">Approval by is required</mat-error>
           </mat-form-field>
           <mat-form-field>
             <input matInput type="number" placeholder="Number of cavities" name="number_of_cavities" ngModel required

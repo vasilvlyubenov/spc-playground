@@ -21,7 +21,6 @@ constructor(private partsService: PartsService, private route: ActivatedRoute) {
 
 downloadDrawing() {{
   this.downloadSub = this.partsService.getDrawingFile(this.partInfo?.drawings?.file_url).subscribe(res => {
-    debugger
     const fileType = res.data.type;
     const file = new Blob([res.data], { type: fileType})
     saveAs(file)
