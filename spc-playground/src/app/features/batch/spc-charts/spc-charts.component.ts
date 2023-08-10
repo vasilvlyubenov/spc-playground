@@ -227,6 +227,7 @@ export class SpcChartsComponent implements OnInit, OnDestroy {
             const graph = {
               data: [data, viol, cl, centre, histo],
               layout: {
+                autosize: true,
                 title: 'SPC Chart',
                 xaxis: {
                   domain: [0, 0.7], // 0 to 70% of width
