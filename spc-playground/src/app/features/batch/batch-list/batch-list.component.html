@@ -1,5 +1,8 @@
 <app-spinner *ngIf="isLoading"></app-spinner>
 <div class="container" *ngIf="!isLoading">
+    <h3>All batches</h3>
+    <mat-divider></mat-divider>
+
     <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
     <table mat-table [dataSource]="batchData" class="mat-elevation-z8" *ngIf="batchData.length > 0">
         <p>batch-list works!</p>

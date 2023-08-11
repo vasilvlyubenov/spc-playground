@@ -18,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import {MatDividerModule} from '@angular/material/divider'; 
 import { SpcChartsComponent } from './spc-charts/spc-charts.component';
 import { CdkTableModule } from '@angular/cdk/table';
 import * as PlotlyJS from 'plotly.js-dist-min';
@@ -42,6 +43,7 @@ PlotlyModule.plotlyjs = PlotlyJS;
     MatIconModule,
     FormsModule,
     MatDatepickerModule,
+    MatDividerModule,
     SharedModule,
     BatchRoutingModule,
     MatTableModule,

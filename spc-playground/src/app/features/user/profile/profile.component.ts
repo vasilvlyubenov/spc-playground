@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
       try {
         if (!!this.avatarUrl) {
-          debugger
+          
           console.log(this.user.avatar_path);
           
           fileInfo = await this.userService.updateUserAvatar(
@@ -62,7 +62,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
             avatar
           );
         } else {
-          debugger
           fileInfo = await this.userService.uploadAvatar(avatar.name, avatar);
         }
       } catch (error) {

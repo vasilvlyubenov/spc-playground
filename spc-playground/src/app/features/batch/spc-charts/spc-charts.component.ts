@@ -228,7 +228,7 @@ export class SpcChartsComponent implements OnInit, OnDestroy {
               data: [data, viol, cl, centre, histo],
               layout: {
                 autosize: true,
-                title: 'SPC Chart',
+                title: `Dimension ${nominalValue} +${upperLimit}/-${lowerLimit}`,
                 xaxis: {
                   domain: [0, 0.7], // 0 to 70% of width
                   zeroline: false,

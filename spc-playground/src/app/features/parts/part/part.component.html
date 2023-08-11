@@ -1,5 +1,8 @@
 <app-spinner *ngIf="isLoading" />
 <div class="container" *ngIf="!isLoading">
+    <h3>All parts</h3>
+    <mat-divider></mat-divider>
+
     <mat-error *ngIf="error">{{error}}</mat-error>
     <ng-container *ngIf="!error">
         <mat-accordion *ngFor="let part of parts">

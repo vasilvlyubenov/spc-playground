@@ -59,7 +59,7 @@ export class DrawingComponent implements OnDestroy, OnInit {
     }
 
     this.fileUrl = await this.partsService.uploadDrawingFile(drawing.name, drawing)
-    debugger
+    
     this.createDrawingSub = this.partsService
       .createDrawing({
         drawing_name,
