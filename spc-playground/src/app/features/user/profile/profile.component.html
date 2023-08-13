@@ -10,11 +10,11 @@
           color="primary"  [disabled]="isForEdit" ngModel>
         </ngx-mat-file-input>
         <mat-form-field>
-          <input matInput type="text" placeholder="First name" name="first_name" [ngModel]="user.first_name ? user.first_name :''" required #firstName="ngModel" [disabled]="isForEdit">
+          <input matInput type="text" placeholder="First name" name="first_name" [ngModel]="user ? user.first_name :''" required #firstName="ngModel" [disabled]="isForEdit">
             <mat-error *ngIf="firstName.errors?.['required']">First name required</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <input matInput type="text" placeholder="Last name" name="last_name" [ngModel]="user.last_name ? user.last_name : ''" required #lastName="ngModel" [disabled]="isForEdit">
+          <input matInput type="text" placeholder="Last name" name="last_name" [ngModel]="user ? user.last_name : ''" required #lastName="ngModel" [disabled]="isForEdit">
               <mat-error *ngIf="lastName.errors?.['required']">Last name is required</mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" [style.display]="isForEdit ? '' : 'none'" type="button" (click)="editInfo()">Edit</button>

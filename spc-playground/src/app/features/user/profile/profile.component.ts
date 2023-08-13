@@ -53,17 +53,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
 
       try {
-        if (!!this.avatarUrl) {
-          
-          console.log(this.user.avatar_path);
-          
-          fileInfo = await this.userService.updateUserAvatar(
-            this.user.avatar_path,
-            avatar
-          );
-        } else {
           fileInfo = await this.userService.uploadAvatar(avatar.name, avatar);
-        }
       } catch (error) {
         this.isLoading = false;
         this.errorMessage = 'Something went wrong!';
@@ -75,7 +65,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     let obj = {};
 
-    if (!this.avatarUrl) {
+    if (avatar) {
       obj = { avatar_path, user_id: this.userId, first_name, last_name };
     } else {
       obj = { user_id: this.userId, first_name, last_name };
@@ -118,7 +108,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         },
       });
     }
-    this.isLoading = true;
+    this.isLoading = false;
   }
 
   private getUserInfo(userId: string) {
@@ -128,14 +118,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
           console.log(error);
           throw error;
         }
-        if (data) {
+       
           this.user = data[0];
-        }
+        
 
         if (this.user.avatar_path) {
           this.avatarUrl = this.userService.getUserAvatarURL(this.user.avatar_path);
         }
-      this.isLoading = false;
       },
     });
   }
@@ -144,6 +133,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.userId = this.route.snapshot.params['userId'];
     this.getUserInfo(this.userId);
+    this.isLoading = false;
+
   }
 
   ngOnDestroy(): void {

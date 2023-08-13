@@ -111,7 +111,7 @@ export class UserService implements OnDestroy {
   }
 
   async updateUserAvatar(avatarPath: string, avatarFile: File): Promise<any> {
-    const {data, error} = await this.supabase.storage.from('public').update(avatarPath, avatarFile, {
+    const {data, error} = await this.supabase.storage.from('public').update(`public/${avatarPath}`, avatarFile, {
       cacheControl: '3600',
       upsert: true,
     })
